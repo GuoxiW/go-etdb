@@ -32,10 +32,10 @@ type DatabaseConfiguration struct {
 
 func init() {
 	file, err := os.Open("./conf.json")
-	if err != nil {
-		panic(err)
+	if err != nil { // nil 为零值
+		panic(err) // 输出错误
 	}
-	defer file.Close()
+	defer file.Close() // 延迟，当函数执行到最后时，这些defer语句会按照逆序执行，最后该函数返回。
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(&config)
 	if err != nil {

@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"fmt" //格式化输出
 	"encoding/json"
-	"github.com/oipwg/media-protocol/oip042"
+	//"github.com/oipwg/media-protocol/oip042"
+	"github.com/GuoxiW/media-protocol/oip042"//  OIP-042 JSON 标准
 	"strings"
 	"time"
 	"strconv"
