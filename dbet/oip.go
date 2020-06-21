@@ -1,3 +1,5 @@
+// 定义了将数据发送给区块链和分块发送的函数。
+
 package main
 
 import (
@@ -6,10 +8,10 @@ import (
 )
 
 const maxDataSize = 1040
-const maxPrefixNoRef = 200
-const maxPrefixRef = 250
-const dataChunk1 = maxDataSize - maxPrefixNoRef
-const dataChunkX = maxDataSize - maxPrefixRef
+const maxPrefixNoRef = 200  // 有前缀的最大值
+const maxPrefixRef = 250 // 没有前缀的最大值
+const dataChunk1 = maxDataSize - maxPrefixNoRef // 有前缀时的组块大小
+const dataChunkX = maxDataSize - maxPrefixRef // 没有前缀时的组块大小
 
 func sendToBlockchain(data string) ([]string, error) {
 	l := len(data)
@@ -31,12 +33,12 @@ func sendToBlockchain(data string) ([]string, error) {
 	var ret []string
 
 	var i int64 = 0
-	var chunkCount = int64((l-dataChunk1)/dataChunkX + 1)
+	var chunkCount = int64((l-dataChunk1)/dataChunkX + 1) // 分块数量
 	remainder := data
 
 	// send first master chunk
-	chunk := remainder[:dataChunk1]
-	remainder = remainder[dataChunk1:]
+	chunk := remainder[:dataChunk1] // 分块1数据
+	remainder = remainder[dataChunk1:] // 剩余部分数据
 	ref, err := sendPart(i, chunkCount, "", chunk)
 	if err != nil {
 		return ret, err

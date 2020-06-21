@@ -1,3 +1,6 @@
+// 在 ```history.json``` 中存着信息，如果没有会自动创建并返回，有的话解析文件。
+// 定义了保存ipfs哈希值等ipfs操作的函数，todo。
+
 package main
 
 import (
@@ -13,7 +16,7 @@ import (
 var ipfsHashes map[string]ipfsHash
 
 type ipfsHash struct {
-	Data     string `json:"d,omitempty"`
+	Data     string `json:"d,omitempty"` // 指定如果字段具有空值，定义为false，0，零指针，nil接口值以及任何空数组，切片，映射或字符串，则该字段应从编码中省略
 	KeyMov   string `json:"k,omitempty"`
 	Combined string `json:"c,omitempty"`
 	Caps     string `json:"caps,omitempty"`

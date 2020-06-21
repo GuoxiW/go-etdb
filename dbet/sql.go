@@ -1,15 +1,17 @@
+// sql 相关的函数。
+
 package main
 
 import (
 	"io/ioutil"
-	"database/sql"
+	"database/sql" // sql 包提供了保证SQL或类SQL数据库的泛用接口
 
-	"github.com/jmoiron/sqlx"
-	"github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx" // sql 通用拓展
+	"github.com/go-sql-driver/mysql" // mysql
 	"errors"
 	"strings"
 	"strconv"
-	"regexp"
+	"regexp" // 正则表达式
 )
 
 var (

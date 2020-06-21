@@ -1,3 +1,6 @@
+// 定义设置结构体。
+// 具体的设置存贮在 ```conf.json``` 中。
+
 package main
 
 import (

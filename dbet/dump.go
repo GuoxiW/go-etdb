@@ -1,3 +1,5 @@
+// 发布数据到区块链。
+
 package main
 
 import (
@@ -7,13 +9,13 @@ import (
 	"github.com/GuoxiW/media-protocol/oip042"//  OIP-042 JSON 标准
 	"strings"
 	"time"
-	"strconv"
+	"strconv" // 数据类型转换
 	"os"
-	"os/exec"
+	"os/exec" // 执行外部命令
 )
 
 type OipArtifact struct {
-	Pt oip042.PublishTomogram `json:"artifact"`
+	Pt oip042.PublishTomogram `json:"artifact"` // artifact 人工添加的信息 https://github.com/GuoxiW/media-protocol
 }
 type OipPublish struct {
 	OipArtifact `json:"publish"`
@@ -23,18 +25,18 @@ type rWrap struct {
 }
 
 func main() {
-	ids, err := GetFilterIdList()
-	if err != nil {
+	ids, err := GetFilterIdList()  // 获得 id 列表
+	if err != nil { // := 是声明并赋值
 		panic(err)
 	}
 
 	for _, id := range ids {
 		if _, ok := history[id]; ok {
-			fmt.Printf("Tilt %s already published\n", id)
+			fmt.Printf("Tilt %s already published\n", id)  // 判断是否已经发布
 			continue
 		}
 
-		pt, err := tiltIdToPublishTomogram(id)
+		pt, err := tiltIdToPublishTomogram(id)  // 发布
 		if err != nil {
 			fmt.Println("Unable to obtain " + id)
 			fmt.Println(err)
@@ -42,7 +44,7 @@ func main() {
 			fmt.Println("---------")
 			//PrettyPrint(pt)
 
-			min, err := json.Marshal(rWrap{OipPublish{OipArtifact{pt}}})
+			min, err := json.Marshal(rWrap{OipPublish{OipArtifact{pt}}}) // 将数据编码成json字符串
 			if err != nil {
 				panic(err)
 			}
@@ -52,7 +54,7 @@ func main() {
 				panic(err)
 			} else {
 				history[id] = ids
-				PrettyPrint(ids)
+				PrettyPrint(ids) // json 格式处理
 			}
 		}
 
@@ -64,7 +66,7 @@ func main() {
 	}
 }
 
-func convertVideo(flv string, mp4 string) error {
+func convertVideo(flv string, mp4 string) error { // 转换数据格式
 	fmt.Println("Converting " + flv + " -> " + mp4)
 	bin := "ffmpeg"
 	args := []string{"-i", flv, "-movflags", "faststart", "-nostats",
@@ -119,7 +121,7 @@ func processFiles(row TiltSeries) (ipfsHash, error) {
 }
 
 func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error) {
-	tsr, err := GetTiltSeriesById(tiltSeriesId)
+	tsr, err := GetTiltSeriesById(tiltSeriesId)  // 获取序列
 	if err != nil {
 		panic(err)
 	}
@@ -130,7 +132,7 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 	hash, ok := ipfsHashes[tiltSeriesId]
 	emptyDir := false
 	if ok {
-		emptyDir, err = containsEmptyFolder(hash.Data)
+		emptyDir, err = containsEmptyFolder(hash.Data)  // 判断是否空文件夹
 		if err != nil {
 			return pt, err
 		}
@@ -337,6 +339,6 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 }
 
 func PrettyPrint(v interface{}) {
-	b, _ := json.MarshalIndent(v, "", "  ")
+	b, _ := json.MarshalIndent(v, "", "  ") // json 格式处理
 	fmt.Println(string(b))
 }

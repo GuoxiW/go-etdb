@@ -1,3 +1,5 @@
+// 定义了 TiltSeries、DataFile、ThreeDFile 三个结构体。
+
 package main
 
 import (

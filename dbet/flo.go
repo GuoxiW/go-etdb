@@ -1,9 +1,11 @@
+// 实现区块链交互功能。
+// 签署消息、发送到地址、设置交易手续费、发送RPC等四个函数。
 package main
 
 import (
 	"errors"
 	"fmt"
-	"github.com/bitspill/flojson"
+	"github.com/bitspill/flojson" // FLO JSON-RPC API
 	"strings"
 	"time"
 )
