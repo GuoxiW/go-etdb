@@ -17,8 +17,17 @@
 
 
 -- All public tomograms
+# SELECT t.tiltseriesID
+# FROM TiltSeriesData AS t
+#   JOIN UserData AS u ON u.DEF_id = t.`REF|UserData|user`
+#   JOIN SpeciesData AS s ON s.DEF_id = t.`REF|SpeciesData|specie`
+# WHERE t.ispublic = 1 ORDER BY t.tiltseriesID ASC;
+
+
+
+-- guoxi's fake
 SELECT t.tiltseriesID
 FROM TiltSeriesData AS t
   JOIN UserData AS u ON u.DEF_id = t.`REF|UserData|user`
   JOIN SpeciesData AS s ON s.DEF_id = t.`REF|SpeciesData|specie`
-WHERE t.ispublic = 1 ORDER BY t.tiltseriesID ASC;
+WHERE u.fullname = 'testuname' AND s.SpeciesName = 'testsname' AND t.ispublic = 1;

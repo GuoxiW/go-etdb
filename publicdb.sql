@@ -7,7 +7,7 @@
 -- Server version: 5.1.73
 -- PHP Version: 5.3.3
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO"; -- 自增长
 SET time_zone = "+00:00";
 
 
@@ -28,7 +28,7 @@ USE `publicdb`;
 -- Table structure for table `AcquisitionData`
 --
 
-CREATE TABLE IF NOT EXISTS `AcquisitionData` (
+CREATE TABLE IF NOT EXISTS `AcquisitionData` (  -- 获取
   `DEF_id` int(11) NOT NULL,
   `DEF_timestamp` timestamp NULL DEFAULT NULL,
   `acquisitionname` text NOT NULL,
@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `SpeciesData` (
   `DEF_id` int(3) NOT NULL,
   `DEF_timestamp` timestamp NULL DEFAULT NULL,
   `SpeciesName` text NOT NULL,
-  `strain` text,
+  `strain` text,  -- 压力
   `tax_id` int(11) DEFAULT '0',
   `TXT_notes` text,
   `count` int(15) NOT NULL DEFAULT '0',
@@ -196,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `TiltSeriesData` (
   `tomo_date` date DEFAULT NULL,
   `keywords` text,
   `roles` text,
-  `REF|SpeciesData|specie` text,
+  `REF|SpeciesData|specie` text, -- 种类
   `treatment` text,
   `sample` text,
   `single_dual` int(1) DEFAULT NULL,
@@ -204,10 +204,10 @@ CREATE TABLE IF NOT EXISTS `TiltSeriesData` (
   `tilt_max` double DEFAULT NULL,
   `tilt_step` text,
   `tilt_constant` int(1) DEFAULT NULL,
-  `dosage` double DEFAULT NULL,
-  `defocus` double DEFAULT NULL,
-  `magnification` double DEFAULT NULL,
-  `voxel` double DEFAULT '0',
+  `dosage` double DEFAULT NULL,　-- 剂量
+  `defocus` double DEFAULT NULL,  -- 散焦
+  `magnification` double DEFAULT NULL,  -- 放大
+  `voxel` double DEFAULT '0', -- 体素
   `scope` text NOT NULL,
   `software_acquisition` text,
   `software_process` text,
