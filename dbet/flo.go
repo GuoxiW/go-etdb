@@ -19,7 +19,7 @@ var (
 
 func init() {
 	id = 0 // id is static at 0, for "proper" json-rpc increment with each call
-	user = config.FloConfiguration.RpcUser
+	user = config.FloConfiguration.RpcUser  // 读取 config.go 中的设置
 	pass = config.FloConfiguration.RpcPass
 	server = config.FloConfiguration.RpcAddress
 }

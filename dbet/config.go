@@ -1,23 +1,23 @@
-// 定义设置结构体。
+// 将 conf.json 中的数据读出来。
 // 具体的设置存贮在 ```conf.json``` 中。
 
 package main
 
 import (
-	"os"
 	"encoding/json"
+	"os"
 )
 
 var (
 	config Configuration
 )
 
-type Configuration struct {
+type Configuration struct { // 指向本目录下的 config.go
 	DatabaseConfiguration `json:"databaseConfiguration"`
 	FloConfiguration      `json:"floConfiguration"`
 }
 
-type FloConfiguration struct {
+type FloConfiguration struct { //读取 config.go 中的 floConfiguration
 	FloAddress string  `json:"floAddress"`
 	RpcAddress string  `json:"rpcAddress"`
 	RpcUser    string  `json:"rpcUser"`
@@ -25,7 +25,7 @@ type FloConfiguration struct {
 	TxFeePerKb float64 `json:"txFeePerKb"`
 }
 
-type DatabaseConfiguration struct {
+type DatabaseConfiguration struct {  //读取 config.go 中的 databaseConfiguration
 	User     string `json:"user"`
 	Password string `json:"password"`
 	Net      string `json:"net"`
