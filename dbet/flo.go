@@ -24,7 +24,7 @@ func init() {
 	server = config.FloConfiguration.RpcAddress
 }
 
-func signMessage(address, message string) (string, error) {
+func signMessage(address, message string) (string, error) {  // 签署信息
 	cmd, err := flojson.NewSignMessageCmd(id, address, message)
 	if err != nil {
 		return "", err
@@ -42,7 +42,7 @@ func signMessage(address, message string) (string, error) {
 	return "", errors.New("unexpected rpc error")
 }
 
-func sendToAddress(address string, amount float64, floData string) (string, error) {
+func sendToAddress(address string, amount float64, floData string) (string, error) {  // 发送信息
 	satoshi := int64(1e8 * amount)
 	cmd, err := flojson.NewSendToAddressCmd(id, address, satoshi, "", "", floData)
 	if err != nil {
@@ -59,7 +59,7 @@ func sendToAddress(address string, amount float64, floData string) (string, erro
 	return reply.Result.(string), nil
 }
 
-func setTxFee(floPerKb float64) (error) {
+func setTxFee(floPerKb float64) (error) {  // 设置交易费用
 	var satoshi = int64(floPerKb * 1e8)
 	cmd, err := flojson.NewSetTxFeeCmd(id, satoshi)
 	if err != nil {
@@ -76,7 +76,7 @@ func setTxFee(floPerKb float64) (error) {
 	return nil
 }
 
-func sendRPC(cmd flojson.Cmd) (flojson.Reply, error) {
+func sendRPC(cmd flojson.Cmd) (flojson.Reply, error) {  // 发送RPC调用
 	t := 0
 	for true {
 		reply, err := flojson.RpcSend(user, pass, server, cmd)

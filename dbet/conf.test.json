@@ -1,7 +1,7 @@
 {
     "databaseConfiguration": {
-      "user": "user",
-      "password": "pass",
+      "user": "guoxi",
+      "password": "123456",
       "net": "tcp",
       "address": "localhost:3306",
       "name": "publicdb"
