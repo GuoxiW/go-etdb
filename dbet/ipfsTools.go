@@ -1,4 +1,3 @@
-// 在 ```history.json``` 中存着信息，如果没有会自动创建并返回，有的话解析文件。
 // 定义了保存ipfs哈希值等ipfs操作的函数，todo。
 
 package main
@@ -40,12 +39,12 @@ func init() {
 	}
 }
 
-func saveIpfsHashes() error {
+func saveIpfsHashes() error {  // 存储ipfs哈希值
 	b, _ := json.MarshalIndent(ipfsHashes, "", " ")
 	return ioutil.WriteFile("ipfsHashes.json", b, 0644)
 }
 
-func ipfsPinPath(path string, name string) (string, error) {
+func ipfsPinPath(path string, name string) (string, error) {  // ipfs的pin命令在本地仓库中固定(或解除固定)ipfs对象。
 	fmt.Println("Pinning " + name)
 	bin := "ipfs"
 	args := []string{"add", "-r", "-p=false", "--nocopy", path}
@@ -70,7 +69,7 @@ func ipfsPinPath(path string, name string) (string, error) {
 	}
 }
 
-func ipfsAddLink(dirHash string, name string, link string) (string, error) {
+func ipfsAddLink(dirHash string, name string, link string) (string, error) {  // 为指定对象加入一个新的链接。
 	bin := "ipfs"
 	args := []string{"object", "patch", "add-link", dirHash, name, link}
 
@@ -84,7 +83,7 @@ func ipfsAddLink(dirHash string, name string, link string) (string, error) {
 	return strings.TrimSpace(string(out)), nil
 }
 
-func ipfsNewUnixFsDir() (string, error) {
+func ipfsNewUnixFsDir() (string, error) {  //新建类unix文件系统
 	bin := "ipfs"
 	args := []string{"object", "new", "unixfs-dir"}
 

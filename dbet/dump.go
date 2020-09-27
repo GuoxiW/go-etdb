@@ -25,7 +25,7 @@ type rWrap struct {
 }
 
 func main() {
-	ids, err := GetFilterIdList()  // 获得 id 列表
+	ids, err := GetFilterIdList()  // 根据filter.sql的设定获得 id 列表
 	if err != nil { // := 是声明并赋值
 		panic(err)
 	}
@@ -129,7 +129,7 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 	//PrettyPrint(tsr)
 	var pt oip042.PublishTomogram
 
-	hash, ok := ipfsHashes[tiltSeriesId]
+	hash, ok := ipfsHashes[tiltSeriesId]  // 算它的 ipfs 哈希值
 	emptyDir := false
 	if ok {
 		emptyDir, err = containsEmptyFolder(hash.Data)  // 判断是否空文件夹
@@ -143,7 +143,7 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 			return pt, err
 		}
 		ipfsHashes[tiltSeriesId] = hash
-		saveIpfsHashes()
+		saveIpfsHashes()  // 本目录下保存 ipfs 哈希值
 	}
 
 	ts := time.Now().Unix()

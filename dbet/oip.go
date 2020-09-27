@@ -8,12 +8,12 @@ import (
 )
 
 const maxDataSize = 1040
-const maxPrefixNoRef = 200  // 有前缀的最大值
-const maxPrefixRef = 250 // 没有前缀的最大值
-const dataChunk1 = maxDataSize - maxPrefixNoRef // 有前缀时的组块大小
-const dataChunkX = maxDataSize - maxPrefixRef // 没有前缀时的组块大小
+const maxPrefixNoRef = 200  // 没有编号时前缀的最大值
+const maxPrefixRef = 250 // 有编号时前缀的最大值
+const dataChunk1 = maxDataSize - maxPrefixNoRef // 没有编号时的组块大小
+const dataChunkX = maxDataSize - maxPrefixRef // 有编号时的组块大小
 
-func sendToBlockchain(data string) ([]string, error) {
+func sendToBlockchain(data string) ([]string, error) {  //设置交易费用, 将数据发送给flo地址。
 	l := len(data)
 
 	err := setTxFee(config.TxFeePerKb)
@@ -70,8 +70,8 @@ func sendPart(part int64, of int64, reference string, data string) (string, erro
 	prefix := "oip-mp("
 	suffix := "):"
 
-	p1 := strconv.FormatInt(part, 10)
-	p2 := strconv.FormatInt(of, 10)
+	p1 := strconv.FormatInt(part, 10)  // 类型转换, 将part转换为10进制
+	p2 := strconv.FormatInt(of, 10)  // 类型转换, 将of转换为10进制
 
 	pi := []string{p1, p2, config.FloAddress, reference, data}
 	preImage := strings.Join(pi, "-")

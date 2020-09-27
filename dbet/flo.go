@@ -85,7 +85,7 @@ func sendRPC(cmd flojson.Cmd) (flojson.Reply, error) {  // 发送RPC调用
 			return reply, err
 		}
 		if reply.Error != nil {
-			if (reply.Error.Code == -6 && reply.Error.Message == "Insufficient funds") ||
+			if (reply.Error.Code == -6 && reply.Error.Message == "Insufficient funds") ||  // 余额不足
 				(reply.Error.Code == -4 && strings.HasPrefix(reply.Error.Message, "This transaction requires a transaction fee of at least")) {
 				if t > 20 {
 					fmt.Println("It's been 10 minutes, perhaps you're really out of funds")

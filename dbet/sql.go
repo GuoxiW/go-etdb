@@ -3,15 +3,16 @@
 package main
 
 import (
-	"io/ioutil"
 	"database/sql" // sql 包提供了保证SQL或类SQL数据库的泛用接口
+	"io/ioutil"
 
-	"github.com/jmoiron/sqlx" // sql 通用拓展
-	"github.com/go-sql-driver/mysql" // mysql
 	"errors"
-	"strings"
-	"strconv"
 	"regexp" // 正则表达式
+	"strconv"
+	"strings"
+
+	"github.com/go-sql-driver/mysql" // mysql
+	"github.com/jmoiron/sqlx"        // sql 通用拓展
 )
 
 var (
@@ -28,38 +29,38 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	selectTiltSeriesSummarySql = string(buf)
+	selectTiltSeriesSummarySql = string(buf) // sql文件原文读进来
 
 	buf, err = ioutil.ReadFile("./sql/selectDataFiles.sql")
 	if err != nil {
 		panic(err)
 	}
-	selectDataFilesSql = string(buf)
+	selectDataFilesSql = string(buf) // sql文件原文读进来
 
 	buf, err = ioutil.ReadFile("./sql/selectThreeDFiles.sql")
 	if err != nil {
 		panic(err)
 	}
-	selectThreeDFilesSql = string(buf)
+	selectThreeDFilesSql = string(buf) // sql文件原文读进来
 
 	buf, err = ioutil.ReadFile("./sql/filter.sql")
 	if err != nil {
 		panic(err)
 	}
-	selectFilterSql = string(buf)
+	selectFilterSql = string(buf) // sql文件原文读进来
 
 	conf := mysql.NewConfig()
-	conf.User = config.DatabaseConfiguration.User
-	conf.Passwd = config.DatabaseConfiguration.Password
-	conf.Net = config.DatabaseConfiguration.Net
-	conf.Addr = config.DatabaseConfiguration.Address
-	conf.DBName = config.DatabaseConfiguration.Name
+	conf.User = config.DatabaseConfiguration.User       // 读取 config.go 中的数据
+	conf.Passwd = config.DatabaseConfiguration.Password // 读取 config.go 中的数据
+	conf.Net = config.DatabaseConfiguration.Net         // 读取 config.go 中的数据
+	conf.Addr = config.DatabaseConfiguration.Address    // 读取 config.go 中的数据
+	conf.DBName = config.DatabaseConfiguration.Name     // 读取 config.go 中的数据
 
-	newDb, err := sqlx.Connect("mysql", conf.FormatDSN())
+	newDb, err := sqlx.Connect("mysql", conf.FormatDSN()) // 连接 sql
 	if err != nil {
 		panic(err)
 	}
-	dbh = newDb
+	dbh = newDb // 将连接到的publicdb命名为dbh
 }
 
 type tiltSeriesRow struct {
@@ -106,98 +107,99 @@ type threeDFileRow struct {
 	DefId    sql.NullInt64  `db:"DEF_id"`
 }
 
-var extractTiltStepRe = regexp.MustCompile(`^[0-9.]+`)
+var extractTiltStepRe = regexp.MustCompile(`^[0-9.]+`) // 正则表达式匹配 ^ 表示补集、 + 表示一次或多次匹配
 
-func GetTiltSeriesById(tiltSeriesId string) (ts TiltSeries, err error) {
+func GetTiltSeriesById(tiltSeriesId string) (ts TiltSeries, err error) { // 通过id获得ts数据。
 	var tsr tiltSeriesRow
-	err = dbh.Get(&tsr, selectTiltSeriesSummarySql, 1, tiltSeriesId)
+	err = dbh.Get(&tsr, selectTiltSeriesSummarySql, 1, tiltSeriesId) // 给定tsid, 用sql语句提取tsrow结构体
 	if err != nil {
 		return
 	}
 
+	// 命名函数返回的 ts
 	if tsr.TiltSeriesID.Valid {
-		ts.Id = tsr.TiltSeriesID.String
+		ts.Id = tsr.TiltSeriesID.String  // 检验后命名Id
 	} else {
 		return ts, errors.New("tiltSeriesId returned no result")
 	}
 	if tsr.Title.Valid {
-		ts.Title = tsr.Title.String
+		ts.Title = tsr.Title.String // 检验后命名title
 	}
 	if tsr.SpeciesName.Valid {
-		ts.SpeciesName = tsr.SpeciesName.String
+		ts.SpeciesName = tsr.SpeciesName.String // 检验后命名speciesname
 	}
 	if len(ts.Title) == 0 {
-		ts.Title = ts.SpeciesName
+		ts.Title = ts.SpeciesName // 如果没有title, 用speciesname代替title
 	}
 	if tsr.TomoDate.Valid {
-		ts.Date = tsr.TomoDate.Time
+		ts.Date = tsr.TomoDate.Time // 检验后命名date
 	}
 	if tsr.TsdTXTNotes.Valid {
-		ts.TiltSeriesNotes = tsr.TsdTXTNotes.String
+		ts.TiltSeriesNotes = tsr.TsdTXTNotes.String // 检验后命名tsnotes
 	}
 	if tsr.Scope.Valid {
-		ts.ScopeName = tsr.Scope.String
+		ts.ScopeName = tsr.Scope.String // 检验后命名scopename
 	}
 	if tsr.Roles.Valid {
-		ts.Roles = tsr.Roles.String
+		ts.Roles = tsr.Roles.String // 检验后命名roles
 	}
 	if tsr.ScdTXTNotes.Valid {
-		ts.ScopeNotes = tsr.ScdTXTNotes.String
+		ts.ScopeNotes = tsr.ScdTXTNotes.String // 检验后命名scopenotes
 	}
 	if tsr.SpdTXTNotes.Valid {
-		ts.SpeciesNotes = tsr.SpdTXTNotes.String
+		ts.SpeciesNotes = tsr.SpdTXTNotes.String // 检验后命名speciesnotes
 	}
 	if tsr.Strain.Valid {
-		ts.SpeciesStrain = tsr.Strain.String
+		ts.SpeciesStrain = tsr.Strain.String // 检验后命名speciesstrain
 	}
 	if tsr.TaxId.Valid {
-		ts.SpeciesTaxId = tsr.TaxId.Int64
+		ts.SpeciesTaxId = tsr.TaxId.Int64 // 检验后命名speciestaxid
 	}
 	if tsr.SingleDual.Valid {
-		ts.SingleDual = tsr.SingleDual.Int64
+		ts.SingleDual = tsr.SingleDual.Int64 // 检验后命名singledual
 	}
 	if tsr.Defocus.Valid {
-		ts.Defocus = tsr.Defocus.Float64
+		ts.Defocus = tsr.Defocus.Float64 // 检验后命名defocus
 	}
 	if tsr.Magnification.Valid {
-		ts.Magnification = tsr.Magnification.Float64
+		ts.Magnification = tsr.Magnification.Float64 // 检验后命名magnification
 	}
 	if tsr.Dosage.Valid {
-		ts.Dosage = tsr.Dosage.Float64
+		ts.Dosage = tsr.Dosage.Float64 // 检验后命名dosage
 	}
 	if tsr.TiltConstant.Valid {
-		ts.TiltConstant = tsr.TiltConstant.Float64
+		ts.TiltConstant = tsr.TiltConstant.Float64 // 检验后命名tiltconstant
 	}
 	if tsr.TiltMin.Valid {
-		ts.TiltMin = tsr.TiltMin.Float64
+		ts.TiltMin = tsr.TiltMin.Float64 // 检验后命名tiltmin
 	}
 	if tsr.TiltMax.Valid {
-		ts.TiltMax = tsr.TiltMax.Float64
+		ts.TiltMax = tsr.TiltMax.Float64 // 检验后命名tiltmax
 	}
 	if tsr.TiltStep.Valid {
 		tss := tsr.TiltStep.String
-		ts.TiltStep, _ = strconv.ParseFloat(extractTiltStepRe.FindString(tss), 64)
+		ts.TiltStep, _ = strconv.ParseFloat(extractTiltStepRe.FindString(tss), 64) // 转换为 float64
 	}
 	if tsr.SoftwareAcquisition.Valid {
-		ts.SoftwareAcquisition = tsr.SoftwareAcquisition.String
+		ts.SoftwareAcquisition = tsr.SoftwareAcquisition.String // 检验后命名softwareacquisition
 	}
 	if tsr.SoftwareProcess.Valid {
-		ts.SoftwareProcess = tsr.SoftwareProcess.String
+		ts.SoftwareProcess = tsr.SoftwareProcess.String // 检验后命名softwareprocess
 	}
 	if tsr.Emdb.Valid {
-		ts.Emdb = tsr.Emdb.String
+		ts.Emdb = tsr.Emdb.String // 检验后命名emdb
 	}
 	if tsr.KeyMov.Valid {
-		ts.KeyMov = tsr.KeyMov.Int64
+		ts.KeyMov = tsr.KeyMov.Int64 // 检验后命名keymov
 	}
 	if tsr.KeyImg.Valid {
-		ts.KeyImg = tsr.KeyImg.Int64
+		ts.KeyImg = tsr.KeyImg.Int64 // 检验后命名keyimg
 	}
 	if tsr.FullName.Valid {
-		ts.Microscopist = tsr.FullName.String
+		ts.Microscopist = tsr.FullName.String // 检验后命名microscopist
 	}
 
-	rows, err := dbh.Queryx(selectDataFilesSql, tiltSeriesId)
+	rows, err := dbh.Queryx(selectDataFilesSql, tiltSeriesId) // datafile 的 sql语句来查询 tsid
 	if err != nil {
 		return
 	}
@@ -205,13 +207,13 @@ func GetTiltSeriesById(tiltSeriesId string) (ts TiltSeries, err error) {
 	defer rows.Close()
 	for rows.Next() {
 		var dfr dataFileRow
-		err = rows.StructScan(&dfr)
+		err = rows.StructScan(&dfr) // 扫描结构体
 		if err != nil {
 			return
 		}
 		df := DataFile{}
 		if dfr.Filename.Valid {
-			df.Filename = dfr.Filename.String
+			df.Filename = dfr.Filename.String // 检验命名filename
 			if len(strings.TrimSpace(df.Filename)) == 0 {
 				// No file name, no file...
 				continue
@@ -221,22 +223,22 @@ func GetTiltSeriesById(tiltSeriesId string) (ts TiltSeries, err error) {
 			continue
 		}
 		if dfr.Filetype.Valid {
-			df.Filetype = dfr.Filetype.String
+			df.Filetype = dfr.Filetype.String // 检验命名filetype
 		}
 		if dfr.ThreeDFileImage.Valid {
-			df.ThreeDFileImage = dfr.ThreeDFileImage.String
+			df.ThreeDFileImage = dfr.ThreeDFileImage.String // 检验命名threedfileimage
 		}
 		if dfr.Notes.Valid {
-			df.Notes = dfr.Notes.String
+			df.Notes = dfr.Notes.String // 检验命名notes
 		}
 		if dfr.DefId.Valid {
-			df.DefId = dfr.DefId.Int64
+			df.DefId = dfr.DefId.Int64 // 检验命名defid
 		}
 		if dfr.Auto.Valid {
-			df.Auto = dfr.Auto.Int64
+			df.Auto = dfr.Auto.Int64 // 检验命名auto
 		}
 		df.Type = "tomogram"
-		switch df.Filetype {
+		switch df.Filetype { // 根据filetype选择
 		case "2dimage":
 			df.SubType = "snapshot"
 			if df.Auto == 2 {
@@ -260,7 +262,7 @@ func GetTiltSeriesById(tiltSeriesId string) (ts TiltSeries, err error) {
 		return
 	}
 
-	rows, err = dbh.Queryx(selectThreeDFilesSql, tiltSeriesId)
+	rows, err = dbh.Queryx(selectThreeDFilesSql, tiltSeriesId)  // 3dfiles 的 sql语句来查询 tsid
 	if err != nil {
 		return
 	}
@@ -268,22 +270,22 @@ func GetTiltSeriesById(tiltSeriesId string) (ts TiltSeries, err error) {
 	defer rows.Close()
 	for rows.Next() {
 		var tdfr threeDFileRow
-		err = rows.StructScan(&tdfr)
+		err = rows.StructScan(&tdfr) // 扫描结构体
 		if err != nil {
 			return
 		}
 		tdf := ThreeDFile{}
 		if tdfr.Filename.Valid {
-			tdf.Filename = tdfr.Filename.String
+			tdf.Filename = tdfr.Filename.String  // 检验后命名filename
 		}
 		if tdfr.Classify.Valid {
-			tdf.Classify = tdfr.Classify.String
+			tdf.Classify = tdfr.Classify.String  // 检验后命名classify  文件类型
 		}
 		if tdfr.Notes.Valid {
-			tdf.Notes = tdfr.Filename.String
+			tdf.Notes = tdfr.Filename.String  // 检验后命名notes
 		}
 		if tdfr.DefId.Valid {
-			tdf.DefId = tdfr.DefId.Int64
+			tdf.DefId = tdfr.DefId.Int64  // 检验后命名defid
 		}
 		tdf.Type = "tomogram"
 		switch tdf.Classify {
@@ -299,8 +301,8 @@ func GetTiltSeriesById(tiltSeriesId string) (ts TiltSeries, err error) {
 				tdf.Software = ts.SoftwareProcess
 			}
 			tdf.FilePath = "/services/tomography/data/" + tiltSeriesId + "/3dimage_" + strconv.FormatInt(tdf.DefId, 10) + "/" + tdf.Filename
-		case "subvolume":
-			fallthrough
+		case "subvolume":  // 子卷
+			fallthrough  // fallthrough 会强制执行后面 case 的代码,不管 case 是 true 还是 false, 就是 other 会默认执行。
 		case "other":
 			tdf.SubType = tdf.Classify
 			tdf.FilePath = "/services/tomography/data/" + tiltSeriesId + "/3dimage_" + strconv.FormatInt(tdf.DefId, 10) + "/" + tdf.Filename
@@ -321,7 +323,7 @@ func GetTiltSeriesById(tiltSeriesId string) (ts TiltSeries, err error) {
 func GetFilterIdList() ([]string, error) {
 	var ids []string
 
-	err := dbh.Select(&ids, selectFilterSql)
+	err := dbh.Select(&ids, selectFilterSql)  // 根据 filter.sql 中的设置选择id
 	if err != nil {
 		return nil, err
 	}
