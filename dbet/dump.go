@@ -48,7 +48,7 @@ func main() {
 			if err != nil {
 				panic(err)
 			}
-			ids, err := sendToBlockchain("json:" + string(min))
+			ids, err := sendToBlockchain("json:" + string(min))  // 发送
 			if err != nil {
 				fmt.Println(ids)
 				panic(err)
@@ -58,7 +58,7 @@ func main() {
 			}
 		}
 
-		err = saveHistory()
+		err = saveHistory()  // 记录历史
 		if err != nil {
 			panic(err)
 		}
@@ -203,7 +203,7 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 
 	capDir := ""
 	for _, df := range tsr.DataFiles {
-		fName := strings.TrimPrefix(df.FilePath, "/services/tomography/data/"+tsr.Id+"/")
+		fName := strings.TrimPrefix(df.FilePath, "/services/tomography/data/"+tsr.Id+"/")  // 返回不含前缀字符的 df.FilePath
 		if df.Auto == 2 {
 			if capDir == "" {
 				capDir, err = ipfsNewUnixFsDir()
@@ -219,10 +219,10 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 			if err != nil {
 				return pt, err
 			}
-			fName =  "AutoCaps/" + strings.TrimPrefix(df.FilePath, "/services/tomography/data/Caps/")
+			fName =  "AutoCaps/" + strings.TrimPrefix(df.FilePath, "/services/tomography/data/Caps/")  // 返回不含前缀字符的 df.FilePath
 		}
 
-		fi, err := os.Stat(df.FilePath)
+		fi, err := os.Stat(df.FilePath)  // 获取文件属性
 		if err != nil {
 			return pt, err
 		}
@@ -295,7 +295,7 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 	}
 	if tsr.KeyMov > 0 && tsr.KeyMov <= 4 {
 		kmf := "keymov_" + tsr.Id + ".mp4"
-		fi, err := os.Stat("/services/tomography/data/Videos/" + kmf)
+		fi, err := os.Stat("/services/tomography/data/Videos/" + kmf)  // 获取文件属性
 		if err != nil {
 			return pt, err
 		}
@@ -308,7 +308,7 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 		}
 		pt.Storage.Files = append(pt.Storage.Files, km)
 		kmf = "keymov_" + tsr.Id + ".flv"
-		fi, err = os.Stat("/services/tomography/data/" + tsr.Id + "/" + kmf)
+		fi, err = os.Stat("/services/tomography/data/" + tsr.Id + "/" + kmf)  // 获取文件属性
 		if err != nil {
 			return pt, err
 		}
