@@ -29,14 +29,18 @@ func main() {
 	if err != nil { // := 是声明并赋值
 		panic(err)
 	}
+	//fmt.Println(ids) [testseries]
+	//fmt.Println(history) map[]
 
-	for _, id := range ids {
+
+	for _, id := range ids {  // 列表进行循环
 		if _, ok := history[id]; ok {
 			fmt.Printf("Tilt %s already published\n", id)  // 判断是否已经发布
 			continue
 		}
 
-		pt, err := tiltIdToPublishTomogram(id)  // 发布
+		pt, err := tiltIdToPublishTomogram(id)  // 发布单个id
+		//fmt.Println(pt) // {{ 0   <nil> [] <nil> <nil> } {0 0 0      0 0 0 0 0 0 0 0     }}
 		if err != nil {
 			fmt.Println("Unable to obtain " + id)
 			fmt.Println(err)
@@ -83,7 +87,10 @@ func convertVideo(flv string, mp4 string) error { // 转换数据格式
 
 func processFiles(row TiltSeries) (ipfsHash, error) {
 	h := ipfsHash{}
-	s, err := ipfsPinPath("/services/tomography/data/"+row.Id, row.Id)
+	//fmt.Println(h) // {   }
+	//fmt.Println(row) // {testseries testtitle 2020-01-01 00:00:00 +0000 UTC testnotes testscope testroles testnotes testsname testnotes teststrain 1 1 0.1 0.2 0.3 0 0.4 2 0.1 testacquisition testprocess testemdb 0 0 testuname   [{2dimage testfname testnotes testtdimage tomogram snapshot /home/guoxi/blockchain/tomography/data/testseries/file_123/testfname 123 0 }] [{rawdata testfname testfname tomogram tiltSeries /home/guoxi/blockchain/tomography/data/testseries/rawdata/testfname 123 testacquisition}]}
+	//fmt.Println(row.Id) // testseries
+	s, err := ipfsPinPath("/home/guoxi/blockchain/tomography/data/"+row.Id, row.Id)
 	if err != nil {
 		return h, err
 	}
@@ -91,8 +98,8 @@ func processFiles(row TiltSeries) (ipfsHash, error) {
 
 	km := "keymov_" + row.Id
 	if row.KeyMov > 0 && row.KeyMov <= 4 {
-		flv := "/services/tomography/data/" + row.Id + "/" + km + ".flv"
-		mp4 := "/services/tomography/data/Videos/" + km + ".mp4"
+		flv := "/home/guoxi/blockchain/tomography/data/" + row.Id + "/" + km + ".flv"
+		mp4 := "/home/guoxi/blockchain/tomography/data/Videos/" + km + ".mp4"
 
 		err := convertVideo(flv, mp4)
 		if err != nil {
@@ -122,22 +129,83 @@ func processFiles(row TiltSeries) (ipfsHash, error) {
 
 func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error) {
 	tsr, err := GetTiltSeriesById(tiltSeriesId)  // 获取序列
+	//fmt.Println(tsr) //{testseries testtitle 2020-01-01 00:00:00 +0000 UTC testnotes testscope testroles testnotes testsname testnotes teststrain 1 1 0.1 0.2 0.3 0 0.4 2 0.1 testacquisition testprocess testemdb 0 0 testuname   [{2dimage testfname.png testnotes testtdimage tomogram snapshot /home/guoxi/blockchain/tomography/data/testseries/file_123/testfname.png 123 0 }] [{rawdata testfname.mp4 testfname.mp4 tomogram tiltSeries /home/guoxi/blockchain/tomography/data/testseries/rawdata/testfname.mp4 123 testacquisition}]}
+	//PrettyPrint(tsr)
+	//{
+	//  "Id": "testseries",
+	//  "Title": "testtitle",
+	//  "Date": "2020-01-01T00:00:00Z",
+	//  "TiltSeriesNotes": "testnotes",
+	//  "ScopeName": "testscope",
+	//  "Roles": "testroles",
+	//  "ScopeNotes": "testnotes",
+	//  "SpeciesName": "testsname",
+	//  "SpeciesNotes": "testnotes",
+	//  "SpeciesStrain": "teststrain",
+	//  "SpeciesTaxId": 1,
+	//  "SingleDual": 1,
+	//  "Defocus": 0.1,
+	//  "Magnification": 0.2,
+	//  "Dosage": 0.3,
+	//  "TiltConstant": 0,
+	//  "TiltMin": 0.4,
+	//  "TiltMax": 2,
+	//  "TiltStep": 0.1,
+	//  "SoftwareAcquisition": "testacquisition",
+	//  "SoftwareProcess": "testprocess",
+	//  "Emdb": "testemdb",
+	//  "KeyImg": 0,
+	//  "KeyMov": 0,
+	//  "Microscopist": "testuname",
+	//  "Institution": "",
+	//  "Lab": "",
+	//  "DataFiles": [
+	//    {
+	//      "Filetype": "2dimage",
+	//      "Filename": "testfname.png",
+	//      "Notes": "testnotes",
+	//      "ThreeDFileImage": "testtdimage",
+	//      "Type": "tomogram",
+	//      "SubType": "snapshot",
+	//      "FilePath": "/home/guoxi/blockchain/tomography/data/testseries/file_123/testfname.png",
+	//      "DefId": 123,
+	//      "Auto": 0,
+	//      "Software": ""
+	//    }
+	//  ],
+	//  "ThreeDFiles": [
+	//    {
+	//      "Classify": "rawdata",
+	//      "Notes": "testfname.mp4",
+	//      "Filename": "testfname.mp4",
+	//      "Type": "tomogram",
+	//      "SubType": "tiltSeries",
+	//      "FilePath": "/home/guoxi/blockchain/tomography/data/testseries/rawdata/testfname.mp4",
+	//      "DefId": 123,
+	//      "Software": "testacquisition"
+	//    }
+	//  ]
+	//}
+
 	if err != nil {
 		panic(err)
 	}
 
 	//PrettyPrint(tsr)
 	var pt oip042.PublishTomogram
-
+	//fmt.Println(tiltSeriesId)
 	hash, ok := ipfsHashes[tiltSeriesId]  // 算它的 ipfs 哈希值
+	//fmt.Println(hash) // {   } 新输入文件这里可能就是空的
+	//fmt.Println(ok) // false
 	emptyDir := false
-	if ok {
+	if ok {  // 如果hash不是空的，意味着不是新输入文件
 		emptyDir, err = containsEmptyFolder(hash.Data)  // 判断是否空文件夹
+
 		if err != nil {
 			return pt, err
 		}
 	}
-	if !ok || hash.Data == "" || hash.KeyMov == "" || hash.Combined == "" || emptyDir {
+	if !ok || hash.Data == "" || hash.KeyMov == "" || hash.Combined == "" || emptyDir {  // 或关系，满足一个即可
 		hash, err = processFiles(tsr)
 		if err != nil {
 			return pt, err
@@ -203,7 +271,7 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 
 	capDir := ""
 	for _, df := range tsr.DataFiles {
-		fName := strings.TrimPrefix(df.FilePath, "/services/tomography/data/"+tsr.Id+"/")  // 返回不含前缀字符的 df.FilePath
+		fName := strings.TrimPrefix(df.FilePath, "/home/guoxi/blockchain/tomography/data/"+tsr.Id+"/")  // 返回不含前缀字符的 df.FilePath
 		if df.Auto == 2 {
 			if capDir == "" {
 				capDir, err = ipfsNewUnixFsDir()
@@ -219,7 +287,7 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 			if err != nil {
 				return pt, err
 			}
-			fName =  "AutoCaps/" + strings.TrimPrefix(df.FilePath, "/services/tomography/data/Caps/")  // 返回不含前缀字符的 df.FilePath
+			fName =  "AutoCaps/" + strings.TrimPrefix(df.FilePath, "/home/guoxi/blockchain/tomography/data/Caps/")  // 返回不含前缀字符的 df.FilePath
 		}
 
 		fi, err := os.Stat(df.FilePath)  // 获取文件属性
@@ -258,7 +326,7 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 			FNotes:   tdf.Notes,
 			Fsize:    fi.Size(),
 			Dname:    tdf.Filename,
-			Fname:    strings.TrimPrefix(tdf.FilePath, "/services/tomography/data/"+tsr.Id+"/"),
+			Fname:    strings.TrimPrefix(tdf.FilePath, "/home/guoxi/blockchain/tomography/data/"+tsr.Id+"/"),
 			Software: tdf.Software,
 		}
 		pt.Storage.Files = append(pt.Storage.Files, af)
@@ -266,7 +334,7 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 
 	if tsr.KeyImg > 0 && tsr.KeyImg <= 4 {
 		kif := "keyimg_" + tsr.Id + "_s.jpg"
-		fi, err := os.Stat("/services/tomography/data/" + tsr.Id + "/" + kif)
+		fi, err := os.Stat("/home/guoxi/blockchain/tomography/data/" + tsr.Id + "/" + kif)
 		if err != nil {
 			return pt, err
 		}
@@ -280,7 +348,7 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 		pt.Storage.Files = append(pt.Storage.Files, ki)
 
 		kif = "keyimg_" + tsr.Id + ".jpg"
-		fi, err = os.Stat("/services/tomography/data/" + tsr.Id + "/" + kif)
+		fi, err = os.Stat("/home/guoxi/blockchain/tomography/data/" + tsr.Id + "/" + kif)
 		if err != nil {
 			return pt, err
 		}
@@ -295,7 +363,7 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 	}
 	if tsr.KeyMov > 0 && tsr.KeyMov <= 4 {
 		kmf := "keymov_" + tsr.Id + ".mp4"
-		fi, err := os.Stat("/services/tomography/data/Videos/" + kmf)  // 获取文件属性
+		fi, err := os.Stat("/home/guoxi/blockchain/tomography/data/Videos/" + kmf)  // 获取文件属性
 		if err != nil {
 			return pt, err
 		}
@@ -308,7 +376,7 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 		}
 		pt.Storage.Files = append(pt.Storage.Files, km)
 		kmf = "keymov_" + tsr.Id + ".flv"
-		fi, err = os.Stat("/services/tomography/data/" + tsr.Id + "/" + kmf)  // 获取文件属性
+		fi, err = os.Stat("/home/guoxi/blockchain/tomography/data/" + tsr.Id + "/" + kmf)  // 获取文件属性
 		if err != nil {
 			return pt, err
 		}
