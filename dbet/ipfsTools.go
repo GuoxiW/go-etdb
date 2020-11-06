@@ -48,24 +48,35 @@ func saveIpfsHashes() error {  // 存储ipfs哈希值
 
 func ipfsPinPath(path string, name string) (string, error) {  // ipfs的pin命令在本地仓库中固定(或解除固定)ipfs对象。
 	fmt.Println("Pinning " + name)
-	//fmt.Println(path) // /home/guoxi/blockchain/tomography/data/testseries
+	//fmt.Println(path) // /home/guoxi/snap/ipfs/blockchain/tomography/data/testseries
 	bin := "ipfs"
 	args := []string{"add", "-r", "-p=false", "--nocopy", path}  // -r 递归添加目录内容  -p 流式输出过程数据  --nocopy 使用filestore添加文件，实验特性
-	//fmt.Println(args)  // [add -r -p=false --nocopy /home/guoxi/blockchain/tomography/data/testseries]
+	//fmt.Println(args)  // [add -r -p=false --nocopy /home/guoxi/snap/ipfs/blockchain/tomography/data/testseries]
 
 	ial := exec.Command(bin, args...)
-	//fmt.Println(ial) // &{/snap/bin/ipfs [ipfs add -r -p=false --nocopy /home/guoxi/blockchain/tomography/data/testseries] []  <nil> <nil> <nil> [] <nil> <nil> <nil> <nil> <nil> false [] [] [] [] <nil> <nil>}
-	ial.Env = append(ial.Env, "/home/guoxi/blockchain/tomography/.ipfs")
+	//fmt.Println(ial) // &{/snap/bin/ipfs [ipfs add -r -p=false --nocopy /home/guoxi/snap/ipfs/blockchain/tomography/data/testseries] []  <nil> <nil> <nil> [] <nil> <nil> <nil> <nil> <nil> false [] [] [] [] <nil> <nil>}
+	//ial.Env = append(ial.Env, "IPFS_PATH=/home/guoxi/snap/ipfs")
+	//ial.Env = append(ial.Env, "/home/guoxi/snap/ipfs/common/.ipfs")
 	out, err := ial.CombinedOutput()
 	fmt.Println(string(out)) // internal error, please report: running "ipfs" failed: cannot parse environment entry: "/home/guoxi/blockchain/tomography/.ipfs"
+
+	//added bafkreig65botpnfaoyaqw6y4fum42mtpjv7uwpn5jzmug52mxuhwnnr26m testseries/file_123/testfname.png
+	//added bafkreicwdkuz6ttg57xvthypclt4yaxv5zo5idkcvjc637hgyvqv3a3txi testseries/rawdata/testfname.mp4
+	//added QmPt7pF3tW5ED86Gp6cVsgfZZfMSFmsmLWUhpVbpNzz2fY testseries/file_123
+	//added QmV8KjBom7dTA8Mrv4yscgmJfxWzLq8nieWtvHkbrFML6W testseries/rawdata
+	//added QmeDS7vWdhPQ6tL1kgUGdqYfy4CxDpxbrt7AbPweKDedKy testseries
+	
 	//fmt.Println(err) // exit status 46
 	if err != nil {
 		return string(out), err
 	}
 
 	lines := strings.Split(string(out), "\n")
+	//fmt.Println(lines) //[added bafkreig65botpnfaoyaqw6y4fum42mtpjv7uwpn5jzmug52mxuhwnnr26m testseries/file_123/testfname.png added bafkreicwdkuz6ttg57xvthypclt4yaxv5zo5idkcvjc637hgyvqv3a3txi testseries/rawdata/testfname.mp4 added QmPt7pF3tW5ED86Gp6cVsgfZZfMSFmsmLWUhpVbpNzz2fY testseries/file_123 added QmV8KjBom7dTA8Mrv4yscgmJfxWzLq8nieWtvHkbrFML6W testseries/rawdata added QmeDS7vWdhPQ6tL1kgUGdqYfy4CxDpxbrt7AbPweKDedKy testseries ]
 	last := lines[len(lines)-2]
+	//fmt.Println(last) //added QmeDS7vWdhPQ6tL1kgUGdqYfy4CxDpxbrt7AbPweKDedKy testseries
 	words := strings.Split(last, " ")
+	//fmt.Println(words)  //[added QmeDS7vWdhPQ6tL1kgUGdqYfy4CxDpxbrt7AbPweKDedKy testseries]
 
 	if words[0] == "added" && words[2] == name {
 		fmt.Println("Pinned. " + words[1])
@@ -76,13 +87,15 @@ func ipfsPinPath(path string, name string) (string, error) {  // ipfs的pin命�
 	}
 }
 
-func ipfsAddLink(dirHash string, name string, link string) (string, error) {  // 为指定对象加入一个新的链接。
+func ipfsAddLink(dirHash string, name string, link string) (string, error) {  // 为指定对象加入一个新的链接,为指定的一个数据链接到keymov。
 	bin := "ipfs"
 	args := []string{"object", "patch", "add-link", dirHash, name, link}
 
 	ial := exec.Command(bin, args...)
-	ial.Env = append(ial.Env, "/home/guoxi/blockchain/tomography/.ipfs")
+	//ial.Env = append(ial.Env, "/home/guoxi/blockchain/tomography/.ipfs")
 	out, err := ial.CombinedOutput()
+	//fmt.Println(string(out)) // QmVqYs6amKxvrb4VETbkrKbCi4KvbX2M64ad6nASZ4Xoyq
+	//fmt.Println(strings.TrimSpace(string(out))) // QmVqYs6amKxvrb4VETbkrKbCi4KvbX2M64ad6nASZ4Xoyq
 	if err != nil {
 		return string(out), err
 	}
@@ -95,7 +108,7 @@ func ipfsNewUnixFsDir() (string, error) {  //新建类unix文件系统
 	args := []string{"object", "new", "unixfs-dir"}
 
 	ial := exec.Command(bin, args...)
-	ial.Env = append(ial.Env, "/home/guoxi/blockchain/tomography/.ipfs")
+	//ial.Env = append(ial.Env, "/home/guoxi/blockchain/tomography/.ipfs")
 	out, err := ial.CombinedOutput()
 	if err != nil {
 		return string(out), err
@@ -111,7 +124,7 @@ func containsEmptyFolder(cid string) (bool, error) {
 
 	ial := exec.Command(bin, args...)
 	//fmt.Println(ial) // &{ipfs [ipfs object links ] []  <nil> <nil> <nil> [] <nil> <nil> <nil> <nil> 0xc420202600 false [] [] [] [] <nil> <nil>}
-	ial.Env = append(ial.Env, "/home/guoxi/blockchain/tomography/.ipfs")
+	//ial.Env = append(ial.Env, "/home/guoxi/blockchain/tomography/.ipfs")
 	out, err := ial.CombinedOutput()
 	//fmt.Println(out) // []
 	if err != nil {

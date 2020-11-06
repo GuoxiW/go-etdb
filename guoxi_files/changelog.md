@@ -6,7 +6,7 @@
 ```
 到
 ```
-/home/guoxi/blockchain/tomography/data/
+/home/guoxi/snap/ipfs/blockchain/tomography/data/
 ```
 
 2. 改动了ipfs路径

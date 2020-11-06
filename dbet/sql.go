@@ -284,16 +284,16 @@ func GetTiltSeriesById(tiltSeriesId string) (ts TiltSeries, err error) { // 通�
 		case "2dimage":
 			df.SubType = "snapshot"
 			if df.Auto == 2 {
-				df.FilePath = "/home/guoxi/blockchain/tomography/data/Caps/" + df.Filename
+				df.FilePath = "/home/guoxi/snap/ipfs/blockchain/tomography/data/Caps/" + df.Filename
 			} else {
-				df.FilePath = "/home/guoxi/blockchain/tomography/data/" + tiltSeriesId + "/file_" + strconv.FormatInt(df.DefId, 10) + "/" + df.Filename
+				df.FilePath = "/home/guoxi/snap/ipfs/blockchain/tomography/data/" + tiltSeriesId + "/file_" + strconv.FormatInt(df.DefId, 10) + "/" + df.Filename
 			}
 		case "movie":
 			df.SubType = "preview"
-			df.FilePath = "/home/guoxi/blockchain/tomography/data/" + tiltSeriesId + "/file_" + strconv.FormatInt(df.DefId, 10) + "/" + df.Filename
+			df.FilePath = "/home/guoxi/snap/ipfs/blockchain/tomography/data/" + tiltSeriesId + "/file_" + strconv.FormatInt(df.DefId, 10) + "/" + df.Filename
 		case "other":
 			df.SubType = "other"
-			df.FilePath = "/home/guoxi/blockchain/tomography/data/" + tiltSeriesId + "/file_" + strconv.FormatInt(df.DefId, 10) + "/" + df.Filename
+			df.FilePath = "/home/guoxi/snap/ipfs/blockchain/tomography/data/" + tiltSeriesId + "/file_" + strconv.FormatInt(df.DefId, 10) + "/" + df.Filename
 		default:
 			panic("Unknown new DataFile.FileType " + df.Filetype + " from DEF_id " + strconv.FormatInt(df.DefId, 10))
 		}
@@ -340,18 +340,18 @@ func GetTiltSeriesById(tiltSeriesId string) (ts TiltSeries, err error) { // 通�
 			if !strings.Contains(ts.SoftwareAcquisition, ",") {
 				tdf.Software = ts.SoftwareAcquisition
 			}
-			tdf.FilePath = "/home/guoxi/blockchain/tomography/data/" + tiltSeriesId + "/rawdata/" + tdf.Filename
+			tdf.FilePath = "/home/guoxi/snap/ipfs/blockchain/tomography/data/" + tiltSeriesId + "/rawdata/" + tdf.Filename
 		case "reconstruction":
 			tdf.SubType = "reconstruction"
 			if !strings.Contains(ts.SoftwareProcess, ",") {
 				tdf.Software = ts.SoftwareProcess
 			}
-			tdf.FilePath = "/home/guoxi/blockchain/tomography/data/" + tiltSeriesId + "/3dimage_" + strconv.FormatInt(tdf.DefId, 10) + "/" + tdf.Filename
+			tdf.FilePath = "/home/guoxi/snap/ipfs/blockchain/tomography/data/" + tiltSeriesId + "/3dimage_" + strconv.FormatInt(tdf.DefId, 10) + "/" + tdf.Filename
 		case "subvolume": // 子卷
 			fallthrough // fallthrough 会强制执行后面 case 的代码,不管 case 是 true 还是 false, 就是 other 会默认执行。
 		case "other":
 			tdf.SubType = tdf.Classify
-			tdf.FilePath = "/home/guoxi/blockchain/tomography/data/" + tiltSeriesId + "/3dimage_" + strconv.FormatInt(tdf.DefId, 10) + "/" + tdf.Filename
+			tdf.FilePath = "/home/guoxi/snap/ipfs/blockchain/tomography/data/" + tiltSeriesId + "/3dimage_" + strconv.FormatInt(tdf.DefId, 10) + "/" + tdf.Filename
 		default:
 			panic("Unknown new DataFile.FileType " + tdf.Classify + " from DEF_id " + strconv.FormatInt(tdf.DefId, 10))
 		}
