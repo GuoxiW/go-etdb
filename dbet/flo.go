@@ -13,7 +13,8 @@ import (
 	"net/url"
 	"strings"
 	"time"
-
+	"io"
+	"io/ioutil"
 	"github.com/bitspill/flojson" // FLO JSON-RPC API
 )
 
@@ -210,22 +211,41 @@ func rpcRawCommand(user string, password string, server string,
 	//fmt.Println(skipverify) //false
 	resp, err := jsonRpcSend(user, password, server, message, true, certificates, true)
 	//fmt.Println(resp) //&{400 Bad Request 400 HTTP/1.0 1 0 map[] 0xc420220240 -1 [] true false map[] 0xc420024500 <nil>}
+	//&{200 OK 200 HTTP/1.1 1 1 map[Content-Type:[application/json]] 0xc4200f0080 -1 [] true false map[] 0xc4202ac200 0xc4200fe000}
 	//fmt.Println(resp.Body) // &{0xc4200ac500 {0 0} false <nil> 0x6574a0 0x657430}
 	//fmt.Println(err) //<nil>
 	if err != nil {
 		err := fmt.Errorf("Error sending json message: " + err.Error())
 		return result, err
 	}
-	result, err = flojson.GetRaw(resp.Body)
-	fmt.Println(result) //[67 108 105 101 110 116 32 115 101 110 116 32 97 110 32 72 84 84 80 32 114 101 113 117 101 115 116 32 116 111 32 97 110 32 72 84 84 80 83 32 115 101 114 118 101 114 46 10]
+	result, err = GetRaw(resp.Body)
+	//fmt.Println(result) //[67 108 105 101 110 116 32 115 101 110 116 32 97 110 32 72 84 84 80 32 114 101 113 117 101 115 116 32 116 111 32 97 110 32 72 84 84 80 83 32 115 101 114 118 101 114 46 10]
 	// 修改后变成[123 34 114 101 115 117 108 116 34 58 110 117 108 108 44 34 101 114 114 111 114 34 58 123 34 99 111 100 101 34 58 45 49 44 34 109 101 115 115 97 103 101 34 58 34 84 104 105 115 32 105 109 112 108 101 109 101 110 116 97 116 105 111 110 32 100 111 101 115 32 110 111 116 32 105 109 112 108 101 109 101 110 116 32 119 97 108 108 101 116 32 99 111 109 109 97 110 100 115 34 125 44 34 105 100 34 58 48 125 10]
-	fmt.Println(err) //<nil>
+	//fmt.Println(err) //<nil>
 	if err != nil {
 		err := fmt.Errorf("Error getting json reply: %v", err)
 		return result, err
 	}
 	return result, err
 }
+
+// GetRaw should be called after JsonRpcSend.  It reads and returns
+// the reply (which you can then call ReadResultCmd() on) and closes the
+// connection.
+func GetRaw(resp io.ReadCloser) ([]byte, error) {
+	body, err := ioutil.ReadAll(resp)
+	fmt.Println(body)
+	fmt.Println(err)
+	resp.Close()
+	if err != nil {
+		err = fmt.Errorf("Error reading json reply: %v", err)
+		return body, err
+	}
+	return body, nil
+}
+
+
+
 
 // jsonRpcSend connects to the daemon with the specified username, password,
 // and ip/port and then send the supplied message.  This uses net/http rather
