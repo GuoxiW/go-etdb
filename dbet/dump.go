@@ -337,7 +337,34 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 	}
 
 	ts := time.Now().Unix()
+	//fmt.Println(ts) //1604628499
 	floAddress := config.FloAddress
+	//fmt.Println(floAddress) //FS267EyRkAEyLNuSaTdbtkgcjjsXEBYhse
+	//fmt.Println(tsr.Title)
+	//fmt.Println(hash.Combined)
+
+	//fmt.Println("reach here")
+	//fmt.Println(tsr.Microscopist)
+	//fmt.Println(tsr.Id)
+	//fmt.Println(tsr.Magnification)
+	//fmt.Println(tsr.Defocus)
+	//fmt.Println(tsr.Dosage)
+	//fmt.Println("reach here")
+	//fmt.Println(tsr.TiltConstant)
+	//fmt.Println(tsr.TiltMin)
+	//fmt.Println(tsr.TiltMax)
+	//fmt.Println(tsr.TiltStep)
+	//fmt.Println(tsr.SpeciesStrain)
+	//fmt.Println(tsr.SpeciesName)
+	//fmt.Println("reach here")
+	//fmt.Println(tsr.ScopeName)
+	//fmt.Println(tsr.Date.Unix())
+	//fmt.Println(tsr.Emdb)
+	//fmt.Println(tsr.SingleDual)
+	//fmt.Println(tsr.SpeciesTaxId)
+	//fmt.Println(tsr.SpeciesName)
+
+
 
 	pt = oip042.PublishTomogram{
 		PublishArtifact: oip042.PublishArtifact{
@@ -346,99 +373,205 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 			Timestamp:  ts,
 			FloAddress: floAddress,
 			Info: &oip042.ArtifactInfo{
-				Title:       tsr.Title,
+				Title:       tsr.Title, //testtitle
 				Description: "Auto imported from etdb",
 				Tags:        "etdb,jensen.lab,tomogram,electron.tomography",
 			},
 			Storage: &oip042.ArtifactStorage{
 				Network:  "ipfs",
-				Location: hash.Combined,
+				Location: hash.Combined, //QmVqYs6amKxvrb4VETbkrKbCi4KvbX2M64ad6nASZ4Xoyq
 				Files:    []oip042.ArtifactFiles{},
 			},
 			Payment: nil, // it's free
 		},
 		TomogramDetails: oip042.TomogramDetails{
-			Microscopist:   tsr.Microscopist,
+			Microscopist:   tsr.Microscopist, //testuname
 			Institution:    "Caltech",
 			Lab:            "Jensen Lab",
-			Sid:            tsr.Id,
-			Magnification:  tsr.Magnification,
-			Defocus:        tsr.Defocus,
-			Dosage:         tsr.Dosage,
-			TiltConstant:   tsr.TiltConstant,
-			TiltMin:        tsr.TiltMin,
-			TiltMax:        tsr.TiltMax,
-			TiltStep:       tsr.TiltStep,
-			Strain:         tsr.SpeciesStrain,
-			SpeciesName:    tsr.SpeciesName,
-			ScopeName:      tsr.ScopeName,
-			Date:           tsr.Date.Unix(),
-			Emdb:           tsr.Emdb,
-			TiltSingleDual: tsr.SingleDual,
-			NCBItaxID:      tsr.SpeciesTaxId,
+			Sid:            tsr.Id, //testseries
+			Magnification:  tsr.Magnification, //0.2
+			Defocus:        tsr.Defocus, //0.1
+			Dosage:         tsr.Dosage, //0.3
+			TiltConstant:   tsr.TiltConstant, //0
+			TiltMin:        tsr.TiltMin, //0.4
+			TiltMax:        tsr.TiltMax, //2
+			TiltStep:       tsr.TiltStep, //0.1
+			Strain:         tsr.SpeciesStrain, //teststrain
+			SpeciesName:    tsr.SpeciesName, //testsname
+			ScopeName:      tsr.ScopeName, //testscope
+			Date:           tsr.Date.Unix(), // 1577836800
+			Emdb:           tsr.Emdb, //testemdb
+			TiltSingleDual: tsr.SingleDual, //1
+			NCBItaxID:      tsr.SpeciesTaxId, //1
 			// ToDo: Needs database cleanup before publishing Roles
 			//Roles:        tsr.Roles,
 		},
 	}
 
+	//PrettyPrint(pt)
+	//{
+	//  "floAddress": "FS267EyRkAEyLNuSaTdbtkgcjjsXEBYhse",
+	//  "timestamp": 1604628871,
+	//  "type": "research",
+	//  "subtype": "tomogram",
+	//  "info": {
+	//    "title": "testtitle",
+	//    "tags": "etdb,jensen.lab,tomogram,electron.tomography",
+	//    "description": "Auto imported from etdb"
+	//  },
+	//  "details": {
+	//    "date": 1577836800,
+	//    "NCBItaxID": 1,
+	//    "scopeName": "testscope",
+	//    "speciesName": "testsname",
+	//    "strain": "teststrain",
+	//    "tiltSingleDual": 1,
+	//    "defocus": 0.1,
+	//    "dosage": 0.3,
+	//    "tiltMin": 0.4,
+	//    "tiltMax": 2,
+	//    "tiltStep": 0.1,
+	//    "magnification": 0.2,
+	//    "emdb": "testemdb",
+	//    "microscopist": "testuname",
+	//    "institution": "Caltech",
+	//    "lab": "Jensen Lab",
+	//    "sid": "testseries"
+	//  },
+	//  "storage": {
+	//    "network": "ipfs",
+	//    "location": "QmVqYs6amKxvrb4VETbkrKbCi4KvbX2M64ad6nASZ4Xoyq"
+	//  }
+	//}
+	//fmt.Println(tsr.ScopeNotes) //testnotes
+	//fmt.Println(tsr.SpeciesNotes) //testnotes
+	//fmt.Println(tsr.TiltSeriesNotes) //testnotes
+	//fmt.Println(pt.TomogramDetails.ArtNotes) //空
 	if len(tsr.ScopeNotes) != 0 {
 		pt.TomogramDetails.ArtNotes += "Scope notes: " + tsr.ScopeNotes + "\n"
 	}
+	//fmt.Println(pt.TomogramDetails.ArtNotes)
+	//Scope notes: testnotes
 	if len(tsr.SpeciesNotes) != 0 {
 		pt.TomogramDetails.ArtNotes += "Species notes: " + tsr.SpeciesNotes + "\n"
 	}
+	//fmt.Println(pt.TomogramDetails.ArtNotes)
+	//Scope notes: testnotes
+	//Species notes: testnotes
 	if len(tsr.TiltSeriesNotes) != 0 {
 		pt.TomogramDetails.ArtNotes += "Tilt series notes: " + tsr.TiltSeriesNotes + "\n"
 	}
+	//fmt.Println(pt.TomogramDetails.ArtNotes)
+	//Scope notes: testnotes
+	//Species notes: testnotes
+	//Tilt series notes: testnotes
 
 	capDir := ""
+	//fmt.Println(tsr.DataFiles) //[{2dimage testfname.png testnotes testtdimage tomogram snapshot /home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png 123 0 }]
 	for _, df := range tsr.DataFiles {
+		//fmt.Println(df) //{2dimage testfname.png testnotes testtdimage tomogram snapshot /home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png 123 0 }
 		fName := strings.TrimPrefix(df.FilePath, "/home/guoxi/snap/ipfs/blockchain/tomography/data/"+tsr.Id+"/")  // 返回不含前缀字符的 df.FilePath
+		//fmt.Println(df.FilePath) ///home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png
+		//fmt.Println(fName) //file_123/testfname.png
+		//fmt.Println(df.Auto) //0
 		if df.Auto == 2 {
 			if capDir == "" {
 				capDir, err = ipfsNewUnixFsDir()
+				//fmt.Println(capDir) //QmUNLLsPACCz1vLxQVkXqqLX5R1X345qqfHbsf67hvA3Nn
+				//fmt.Println(err) //<nil>
 				if err != nil {
 					return pt, err
 				}
 			}
+			//fmt.Println(df.FilePath) ///home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png
+			//fmt.Println(df.Filename) //testfname.png
 			h, err := ipfsPinPath(df.FilePath, df.Filename)
+			//fmt.Println(h) //bafkreig65botpnfaoyaqw6y4fum42mtpjv7uwpn5jzmug52mxuhwnnr26m
 			if err != nil {
 				return pt, err
 			}
 			capDir, err = ipfsAddLink(capDir, df.Filename, h)
+			//fmt.Println(capDir) //QmPt7pF3tW5ED86Gp6cVsgfZZfMSFmsmLWUhpVbpNzz2fY
 			if err != nil {
 				return pt, err
 			}
 			fName =  "AutoCaps/" + strings.TrimPrefix(df.FilePath, "/home/guoxi/snap/ipfs/blockchain/tomography/data/Caps/")  // 返回不含前缀字符的 df.FilePath
+			//fmt.Println(fName) //AutoCaps//home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png
 		}
 
 		fi, err := os.Stat(df.FilePath)  // 获取文件属性
+		//fmt.Println(fi) //&{testfname.png 14 420 {789376539 63739467815 0x913d80} {2049 5781644 1 33188 1000 1000 0 0 14 4096 8 {1604628498 361266611} {1603871015 789376539} {1603871015 789376539} [0 0 0]}}
 		if err != nil {
 			return pt, err
 		}
 		af := oip042.ArtifactFiles{
-			Type:    df.Type,
-			SubType: df.SubType,
-			FNotes:  df.Notes,
-			Fsize:   fi.Size(),
-			Dname:   df.Filename,
-			Fname:   fName,
+			Type:    df.Type, //"tomogram"
+			SubType: df.SubType, //"snapshot"
+			FNotes:  df.Notes, //"testnotes"
+			Fsize:   fi.Size(), //14
+			Dname:   df.Filename, //"testfname.png"
+			Fname:   fName, //"file_123/testfname.png"
 		}
+		//PrettyPrint(af)
+		//{
+		//  "dname": "testfname.png",
+		//  "fname": "file_123/testfname.png",
+		//  "fsize": 14,
+		//  "type": "tomogram",
+		//  "subtype": "snapshot",
+		//  "fNotes": "testnotes"
+		//}
+		//PrettyPrint(pt.Storage.Files)
+		//[]
 		pt.Storage.Files = append(pt.Storage.Files, af)
+		//PrettyPrint(pt.Storage.Files)
+		//[
+		//  {
+		//    "dname": "testfname.png",
+		//    "fname": "file_123/testfname.png",
+		//    "fsize": 14,
+		//    "type": "tomogram",
+		//    "subtype": "snapshot",
+		//    "fNotes": "testnotes"
+		//  }
+		//]		
 	}
 
+	//fmt.Println(capDir) //auto不等于2时为空
 	if capDir != "" {
 		hash.Caps, err = ipfsAddLink(hash.Combined, "AutoCaps", capDir)
+		//fmt.Println(hash) // {QmYwcsnkqo7qbeLHE4UkNWK7UezqrssBA6gudSFRT2eZ8T QmQ7bMwCYZtvorCgaQsYa1hRRtC9xvsJ81jGGpGBG3kZG9 QmVqYs6amKxvrb4VETbkrKbCi4KvbX2M64ad6nASZ4Xoyq QmbHY3oEcDaiEg3yMgDAFS5gc4FfsXNFi3PhtgmQvoaqAc}
+		//PrettyPrint(hash)
+		//{
+		//  "d": "QmYwcsnkqo7qbeLHE4UkNWK7UezqrssBA6gudSFRT2eZ8T",
+		//  "k": "QmQ7bMwCYZtvorCgaQsYa1hRRtC9xvsJ81jGGpGBG3kZG9",
+		//  "c": "QmVqYs6amKxvrb4VETbkrKbCi4KvbX2M64ad6nASZ4Xoyq",
+		//  "caps": "QmbHY3oEcDaiEg3yMgDAFS5gc4FfsXNFi3PhtgmQvoaqAc"
+		//}
+		//fmt.Println(hash.Caps) //QmbHY3oEcDaiEg3yMgDAFS5gc4FfsXNFi3PhtgmQvoaqAc
 		if err != nil {
 			return pt, err
 		}
 		pt.Storage.Location = hash.Caps
 		ipfsHashes[tsr.Id] = hash
+		//PrettyPrint(ipfsHashes)
+		//{
+		//  "testseries": {
+		//    "d": "QmYwcsnkqo7qbeLHE4UkNWK7UezqrssBA6gudSFRT2eZ8T",
+		//    "k": "QmQ7bMwCYZtvorCgaQsYa1hRRtC9xvsJ81jGGpGBG3kZG9",
+		//    "c": "QmVqYs6amKxvrb4VETbkrKbCi4KvbX2M64ad6nASZ4Xoyq",
+		//    "caps": "QmbHY3oEcDaiEg3yMgDAFS5gc4FfsXNFi3PhtgmQvoaqAc"
+		//  }
+		//}		
 		saveIpfsHashes()
 	}
 
+	//fmt.Println(tsr.ThreeDFiles) //[{rawdata testfname.mp4 testfname.mp4 tomogram tiltSeries /home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/rawdata/testfname.mp4 123 testacquisition}]
 	for _, tdf := range tsr.ThreeDFiles {
+		//fmt.Println(tdf) //{rawdata testfname.mp4 testfname.mp4 tomogram tiltSeries /home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/rawdata/testfname.mp4 123 testacquisition}
 		fi, err := os.Stat(tdf.FilePath)
+		//fmt.Println(fi) //&{testfname.mp4 14 420 {113280763 63739467862 0x913d80} {2049 5781646 1 33188 1000 1000 0 0 14 4096 8 {1604755839 284226878} {1603871062 113280763} {1603871062 117280756} [0 0 0]}}
+		//fmt.Println(err) //<nil>
 		if err != nil {
 			return pt, err
 		}
@@ -451,12 +584,27 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 			Fname:    strings.TrimPrefix(tdf.FilePath, "/home/guoxi/snap/ipfs/blockchain/tomography/data/"+tsr.Id+"/"),
 			Software: tdf.Software,
 		}
+		//PrettyPrint(af)
+		//{
+		//  "software": "testacquisition",
+		//  "dname": "testfname.mp4",
+		//  "fname": "rawdata/testfname.mp4",
+		//  "fsize": 14,
+		//  "type": "tomogram",
+		//  "subtype": "tiltSeries",
+		//  "fNotes": "testfname.mp4"
+		//}
+		//fmt.Println(pt.Storage.Files) //[{ false testfname.png 0 AutoCaps//home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png 14 0 0 0 0 0 0 0 tomogram  false 0 0 snapshot  testnotes}]
 		pt.Storage.Files = append(pt.Storage.Files, af)
+		//fmt.Println(pt.Storage.Files) //[{ false testfname.png 0 AutoCaps//home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png 14 0 0 0 0 0 0 0 tomogram  false 0 0 snapshot  testnotes} {testacquisition false testfname.mp4 0 rawdata/testfname.mp4 14 0 0 0 0 0 0 0 tomogram  false 0 0 tiltSeries  testfname.mp4}]
 	}
 
 	if tsr.KeyImg > 0 && tsr.KeyImg <= 4 {
 		kif := "keyimg_" + tsr.Id + "_s.jpg"
+		//fmt.Println(kif) //keyimg_testseries_s.jpg
 		fi, err := os.Stat("/home/guoxi/snap/ipfs/blockchain/tomography/data/" + tsr.Id + "/" + kif)
+		//fmt.Println(fi) &{keyimg_testseries_s.jpg 24 420 {628002886 63740354107 0x913d80} {2049 5784432 1 33188 1000 1000 0 0 24 4096 8 {1604757308 64007574} {1604757307 628002886} {1604757307 628002886} [0 0 0]}}
+		//fmt.Println(err)
 		if err != nil {
 			return pt, err
 		}
@@ -467,10 +615,23 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 			Fsize:   fi.Size(),
 			Fname:   kif,
 		}
+		//PrettyPrint(ki)
+		//{
+		//  "fname": "keyimg_testseries_s.jpg",
+		//  "fsize": 24,
+		//  "type": "image",
+		//  "subtype": "thumbnail",
+		//  "cType": "image/jpeg"
+		//}
+		//fmt.Println(pt.Storage.Files) //[{ false testfname.png 0 AutoCaps//home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png 14 0 0 0 0 0 0 0 tomogram  false 0 0 snapshot  testnotes} {testacquisition false testfname.mp4 0 rawdata/testfname.mp4 14 0 0 0 0 0 0 0 tomogram  false 0 0 tiltSeries  testfname.mp4}]
 		pt.Storage.Files = append(pt.Storage.Files, ki)
+		//fmt.Println(pt.Storage.Files) //[{ false testfname.png 0 AutoCaps//home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png 14 0 0 0 0 0 0 0 tomogram  false 0 0 snapshot  testnotes} {testacquisition false testfname.mp4 0 rawdata/testfname.mp4 14 0 0 0 0 0 0 0 tomogram  false 0 0 tiltSeries  testfname.mp4} { false  0 keyimg_testseries_s.jpg 24 0 0 0 0 0 0 0 image  false 0 0 thumbnail image/jpeg }]
 
 		kif = "keyimg_" + tsr.Id + ".jpg"
+		//fmt.Println(kif) //keyimg_testseries.jpg
 		fi, err = os.Stat("/home/guoxi/snap/ipfs/blockchain/tomography/data/" + tsr.Id + "/" + kif)
+		//fmt.Println(fi) //&{keyimg_testseries.jpg 24 420 {628002000 63740354107 0x913d80} {2049 5780637 1 33188 1000 1000 0 0 24 4096 8 {1604760324 429539000} {1604757307 628002000} {1604760331 869782938} [0 0 0]}}
+		//fmt.Println(err) //<nil>
 		if err != nil {
 			return pt, err
 		}
@@ -481,11 +642,22 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 			Fsize:   fi.Size(),
 			Fname:   "keyimg_" + tsr.Id + ".jpg",
 		}
+		//PrettyPrint(ki)
+		//{
+		//  "fname": "keyimg_testseries.jpg",
+		//  "fsize": 24,
+		//  "type": "tomogram",
+		//  "subtype": "keyimg",
+		//  "cType": "image/jpeg"
+		//}
+		//fmt.Println(pt.Storage.Files) //[{ false testfname.png 0 AutoCaps//home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png 14 0 0 0 0 0 0 0 tomogram  false 0 0 snapshot  testnotes} {testacquisition false testfname.mp4 0 rawdata/testfname.mp4 14 0 0 0 0 0 0 0 tomogram  false 0 0 tiltSeries  testfname.mp4} { false  0 keyimg_testseries_s.jpg 24 0 0 0 0 0 0 0 image  false 0 0 thumbnail image/jpeg }]
 		pt.Storage.Files = append(pt.Storage.Files, ki)
+		//fmt.Println(pt.Storage.Files) //[{ false testfname.png 0 AutoCaps//home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png 14 0 0 0 0 0 0 0 tomogram  false 0 0 snapshot  testnotes} {testacquisition false testfname.mp4 0 rawdata/testfname.mp4 14 0 0 0 0 0 0 0 tomogram  false 0 0 tiltSeries  testfname.mp4} { false  0 keyimg_testseries_s.jpg 24 0 0 0 0 0 0 0 image  false 0 0 thumbnail image/jpeg } { false  0 keyimg_testseries.jpg 24 0 0 0 0 0 0 0 tomogram  false 0 0 keyimg image/jpeg }]
 	}
 	if tsr.KeyMov > 0 && tsr.KeyMov <= 4 {
 		kmf := "keymov_" + tsr.Id + ".mp4"
 		fi, err := os.Stat("/home/guoxi/snap/ipfs/blockchain/tomography/data/Videos/" + kmf)  // 获取文件属性
+		//fmt.Println(fi) //&{keymov_testseries.mp4 1990544 436 {429177064 63740164999 0x913d80} {2049 5770299 1 33204 1000 1000 0 0 1990544 4096 3888 {1604755839 500229195} {1604568199 429177064} {1604568199 429177064} [0 0 0]}}
 		if err != nil {
 			return pt, err
 		}
@@ -496,9 +668,23 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 			Fsize:   fi.Size(),
 			Fname:   kmf,
 		}
+		//PrettyPrint(km)
+		//{
+		//  "fname": "keymov_testseries.mp4",
+		//  "fsize": 1990544,
+		//  "type": "tomogram",
+		//  "subtype": "keymov",
+		//  "cType": "video/mp4"
+		//}
+		//fmt.Println(pt.Storage.Files) //[{ false testfname.png 0 AutoCaps//home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png 14 0 0 0 0 0 0 0 tomogram  false 0 0 snapshot  testnotes} {testacquisition false testfname.mp4 0 rawdata/testfname.mp4 14 0 0 0 0 0 0 0 tomogram  false 0 0 tiltSeries  testfname.mp4} { false  0 keyimg_testseries_s.jpg 24 0 0 0 0 0 0 0 image  false 0 0 thumbnail image/jpeg } { false  0 keyimg_testseries.jpg 24 0 0 0 0 0 0 0 tomogram  false 0 0 keyimg image/jpeg }]
 		pt.Storage.Files = append(pt.Storage.Files, km)
+		//fmt.Println(pt.Storage.Files) //[{ false testfname.png 0 AutoCaps//home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png 14 0 0 0 0 0 0 0 tomogram  false 0 0 snapshot  testnotes} {testacquisition false testfname.mp4 0 rawdata/testfname.mp4 14 0 0 0 0 0 0 0 tomogram  false 0 0 tiltSeries  testfname.mp4} { false  0 keyimg_testseries_s.jpg 24 0 0 0 0 0 0 0 image  false 0 0 thumbnail image/jpeg } { false  0 keyimg_testseries.jpg 24 0 0 0 0 0 0 0 tomogram  false 0 0 keyimg image/jpeg } { false  0 keymov_testseries.mp4 1990544 0 0 0 0 0 0 0 tomogram  false 0 0 keymov video/mp4 }]
+
 		kmf = "keymov_" + tsr.Id + ".flv"
+		//fmt.Println(kmf) //keymov_testseries.flv
 		fi, err = os.Stat("/home/guoxi/snap/ipfs/blockchain/tomography/data/" + tsr.Id + "/" + kmf)  // 获取文件属性
+		//fmt.Println(fi) //&{keymov_testseries.flv 6389760 436 {948048000 63740164231 0x913d80} {2049 5781462 1 33204 1000 1000 0 0 6389760 4096 12480 {1604907635 634991295} {1604567431 948048000} {1604567541 21644465} [0 0 0]}}
+		//fmt.Println(err) //<nil>
 		if err != nil {
 			return pt, err
 		}
@@ -509,16 +695,41 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 			Fsize:   fi.Size(),
 			Fname:   kmf,
 		}
+		//PrettyPrint(km)
+		//{
+		//  "fname": "keymov_testseries.flv",
+		//  "fsize": 6389760,
+		//  "type": "tomogram",
+		//  "subtype": "keymov",
+		//  "cType": "video/x-flv"
+		//}
+		//fmt.Println(pt.Storage.Files) //[{ false testfname.png 0 AutoCaps//home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png 14 0 0 0 0 0 0 0 tomogram  false 0 0 snapshot  testnotes} {testacquisition false testfname.mp4 0 rawdata/testfname.mp4 14 0 0 0 0 0 0 0 tomogram  false 0 0 tiltSeries  testfname.mp4} { false  0 keyimg_testseries_s.jpg 24 0 0 0 0 0 0 0 image  false 0 0 thumbnail image/jpeg } { false  0 keyimg_testseries.jpg 24 0 0 0 0 0 0 0 tomogram  false 0 0 keyimg image/jpeg } { false  0 keymov_testseries.mp4 1990544 0 0 0 0 0 0 0 tomogram  false 0 0 keymov video/mp4 }]
 		pt.Storage.Files = append(pt.Storage.Files, km)
+		//fmt.Println(pt.Storage.Files) //[{ false testfname.png 0 AutoCaps//home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png 14 0 0 0 0 0 0 0 tomogram  false 0 0 snapshot  testnotes} {testacquisition false testfname.mp4 0 rawdata/testfname.mp4 14 0 0 0 0 0 0 0 tomogram  false 0 0 tiltSeries  testfname.mp4} { false  0 keyimg_testseries_s.jpg 24 0 0 0 0 0 0 0 image  false 0 0 thumbnail image/jpeg } { false  0 keyimg_testseries.jpg 24 0 0 0 0 0 0 0 tomogram  false 0 0 keyimg image/jpeg } { false  0 keymov_testseries.mp4 1990544 0 0 0 0 0 0 0 tomogram  false 0 0 keymov video/mp4 } { false  0 keymov_testseries.flv 6389760 0 0 0 0 0 0 0 tomogram  false 0 0 keymov video/x-flv }]
 	}
 
 	loc := hash.Combined
+	//fmt.Println(loc) //QmfJxwEBCbfe5SRQpP1T1jaJrCLMuBSwP8FgpeV54rsPLx
+	//PrettyPrint(hash)
+	//{
+	//  "d": "QmfDatAAh1KzPuFVsAaHo1VS7b4WPeHo4CpwAXS3U2xsWE",
+	//  "k": "QmQ7bMwCYZtvorCgaQsYa1hRRtC9xvsJ81jGGpGBG3kZG9",
+	//  "c": "QmfJxwEBCbfe5SRQpP1T1jaJrCLMuBSwP8FgpeV54rsPLx",
+	//  "caps": "QmZ8P5BLHRxKEg3pA91J7nktqGdeikvvapWiMz2Tzkskv3"
+	//}
 	if capDir != "" {
 		loc = hash.Caps
 	}
+	//fmt.Println(loc) //QmZ8P5BLHRxKEg3pA91J7nktqGdeikvvapWiMz2Tzkskv3
+	//fmt.Println(floAddress) //FS267EyRkAEyLNuSaTdbtkgcjjsXEBYhse
+	//fmt.Println(strconv.FormatInt(ts, 10)) //1604908393
 	v := []string{loc, floAddress, strconv.FormatInt(ts, 10)}
+	//fmt.Println(v) //[QmZ8P5BLHRxKEg3pA91J7nktqGdeikvvapWiMz2Tzkskv3 FS267EyRkAEyLNuSaTdbtkgcjjsXEBYhse 1604908393]
 	preImage := strings.Join(v, "-")
+	//fmt.Println(preImage) //QmZ8P5BLHRxKEg3pA91J7nktqGdeikvvapWiMz2Tzkskv3-FS267EyRkAEyLNuSaTdbtkgcjjsXEBYhse-1604908393
 	signature, err := signMessage(floAddress, preImage)
+	//fmt.Println(signature) //{<nil> <nil> <nil>} Error getting json reply: Error sending json message: Post http://<username>:<password>@localhost:17317: dial tcp 127.0.0.1:17317: connect: connection refused
+	fmt.Println(err)
 	if err != nil {
 		return pt, err
 	}
