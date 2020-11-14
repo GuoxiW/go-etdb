@@ -1,16 +1,16 @@
 {
-    "databaseConfiguration": {
-      "user": "guoxi",
-      "password": "123456",
-      "net": "tcp",
-      "address": "localhost:3306",
-      "name": "publicdb"
-    },
-    "floConfiguration": {
-      "floAddress": "FS267EyRkAEyLNuSaTdbtkgcjjsXEBYhse",
-      "rpcAddress": "localhost:17317",
-      "rpcUser": "user",
-      "rpcPass": "pass",
-      "txFeePerKb": 0.001
-    }
+  "databaseConfiguration": {
+    "user": "guoxi",
+    "password": "123456",
+    "net": "tcp",
+    "address": "localhost:3306",
+    "name": "publicdb"
+  },
+  "floConfiguration": {
+    "floAddress": "FS267EyRkAEyLNuSaTdbtkgcjjsXEBYhse",
+    "rpcAddress": "localhost:17317",
+    "rpcUser": "user",
+    "rpcPass": "pass",
+    "txFeePerKb": 0.001
   }
+}

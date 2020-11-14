@@ -76,12 +76,19 @@ func sendToAddress(address string, amount float64, floData string) (string, erro
 
 func setTxFee(floPerKb float64) error { // 设置交易费用
 	var satoshi = int64(floPerKb * 1e8)
+	//fmt.Println(satoshi) //100000
+	//fmt.Println(id) //0
 	cmd, err := flojson.NewSetTxFeeCmd(id, satoshi)
+	//fmt.Println(cmd) //&{0 100000}
+	//fmt.Println(err) //<nil>
 	if err != nil {
 		return err
 	}
 
 	reply, err := sendRPC(cmd)
+	//fmt.Println(reply) //{<nil> -1: This implementation does not implement wallet commands 0xc4204ca120}
+	//fmt.Println(reply.Error) //-1: This implementation does not implement wallet commands
+	//fmt.Println(err) //-1: This implementation does not implement wallet commands
 	if err != nil {
 		return err
 	}
@@ -234,8 +241,8 @@ func rpcRawCommand(user string, password string, server string,
 // connection.
 func GetRaw(resp io.ReadCloser) ([]byte, error) {
 	body, err := ioutil.ReadAll(resp)
-	fmt.Println(body)
-	fmt.Println(err)
+	//fmt.Println(body)
+	//fmt.Println(err)
 	resp.Close()
 	if err != nil {
 		err = fmt.Errorf("Error reading json reply: %v", err)
@@ -668,7 +675,7 @@ func ReadResultCmd(cmd string, message []byte) (flojson.Reply, error) {
 		//fmt.Println(customCmds[cmd]) //{<nil> <nil> }
 
 		if c, ok := customCmds[cmd]; ok && c.replyParser != nil {
-			fmt.Println("reach here")
+			//fmt.Println("reach here")
 			var res interface{}
 			res, err = c.replyParser(objmap["result"])
 			if err == nil {
@@ -714,10 +721,10 @@ func sendRPC(cmd flojson.Cmd) (flojson.Reply, error) { // 发送RPC调用
 		//fmt.Println(reply) //Error reading json message: Error unmarshalling json reply: invalid character 'C' looking for beginning of value
 		//fmt.Println(err) //{<nil> <nil> <nil>}
 
-		reply, err := RpcSend(user, pass, server, cmd)
-		//fmt.Println(reply) //{<nil> -1: This implementation does not implement wallet commands 0xc4200d2370}
-		//fmt.Println(err) //<nil>
-		//fmt.Println(reply.Error) //-1: This implementation does not implement wallet commands
+		reply, err := flojson.RpcSend(user, pass, server, cmd)
+		fmt.Println(reply) //{<nil> -1: This implementation does not implement wallet commands 0xc4200d2370}
+		fmt.Println(err) //<nil>
+		fmt.Println(reply.Error) //-1: This implementation does not implement wallet commands
 		//fmt.Println(reply.Error.Code) //-1
 
 		if err != nil {

@@ -5,6 +5,7 @@ package main
 import (
 	"strings"
 	"strconv"
+	"fmt"
 )
 
 const maxDataSize = 1040
@@ -14,7 +15,11 @@ const dataChunk1 = maxDataSize - maxPrefixNoRef // 没有编号时的组块大�
 const dataChunkX = maxDataSize - maxPrefixRef // 有编号时的组块大小
 
 func sendToBlockchain(data string) ([]string, error) {  //设置交易费用, 将数据发送给flo地址。
+
 	l := len(data)
+	//fmt.Println(data)
+	//json:{"oip042":{"publish":{"artifact":{"floAddress":"ofMvqGLqxjdJr784cVGRquV3edJA5jEykd","timestamp":1605167830,"type":"research","subtype":"tomogram","info":{"title":"testtitle","tags":"etdb,jensen.lab,tomogram,electron.tomography","description":"Auto imported from etdb"},"details":{"date":1577836800,"NCBItaxID":1,"artNotes":"Scope notes: testnotes\nSpecies notes: testnotes\nTilt series notes: testnotes\n","scopeName":"testscope","speciesName":"testsname","strain":"teststrain","tiltSingleDual":1,"defocus":0.1,"dosage":0.3,"tiltMin":0.4,"tiltMax":2,"tiltStep":0.1,"magnification":0.2,"emdb":"testemdb","microscopist":"testuname","institution":"Caltech","lab":"Jensen Lab","sid":"testseries"},"storage":{"network":"ipfs","location":"QmfJxwEBCbfe5SRQpP1T1jaJrCLMuBSwP8FgpeV54rsPLx","files":[{"dname":"testfname.png","fname":"file_123/testfname.png","fsize":14,"type":"tomogram","subtype":"snapshot","fNotes":"testnotes"},{"software":"testacquisition","dname":"testfname.mp4","fname":"rawdata/testfname.mp4","fsize":14,"type":"tomogram","subtype":"tiltSeries","fNotes":"testfname.mp4"},{"fname":"keyimg_testseries_s.jpg","fsize":24,"type":"image","subtype":"thumbnail","cType":"image/jpeg"},{"fname":"keyimg_testseries.jpg","fsize":24,"type":"tomogram","subtype":"keyimg","cType":"image/jpeg"},{"fname":"keymov_testseries.mp4","fsize":1990544,"type":"tomogram","subtype":"keymov","cType":"video/mp4"},{"fname":"keymov_testseries.flv","fsize":6389760,"type":"tomogram","subtype":"keymov","cType":"video/x-flv"}]},"signature":"Hx4Lf+StYF01XvPvULBk8jgqBerF51Bi6aqZKL3pCht+UcLKkDqHMgCVzfcBDls/1iGYnVZy/NPa0G6VFTF+JlQ="}}}}
+	fmt.Println(l) //1621
 
 	err := setTxFee(config.TxFeePerKb)
 	if err != nil {

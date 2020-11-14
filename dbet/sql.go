@@ -370,7 +370,7 @@ func GetFilterIdList() ([]string, error) {
 	var ids []string
 
 	err := dbh.Select(&ids, selectFilterSql) // 根据 filter.sql 中的设置选择id
-	//fmt.Println(ids) [testseries]
+	//fmt.Println(ids) //[testseries]
 	if err != nil {
 		return nil, err
 	}

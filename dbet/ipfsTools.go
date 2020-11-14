@@ -26,7 +26,7 @@ func init() {
 	// 如果没有json文件就直接return
 	if os.IsNotExist(err) {
 		ipfsHashes = make(map[string]ipfsHash, 100)  // 100可能是map的容量
-		//fmt.Println(ipfsHashes) // map[]
+		fmt.Println(ipfsHashes) // map[]
 		return
 	}
 	// 如果有json文件进行decode
