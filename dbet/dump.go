@@ -41,16 +41,101 @@ func main() {
 		}
 
 		pt, err := tiltIdToPublishTomogram(id)  // 发布单个id
-		//fmt.Println(pt) // {{ 0   <nil> [] <nil> <nil> } {0 0 0      0 0 0 0 0 0 0 0     }}
+		//fmt.Println(pt) //{{oYidNmhhCZ76BEKyZJdiqu7YFAURRfSbCJ 1605494884 research tomogram 0xc4202382c0 [] 0xc420238300 <nil> IM198hMbDLY1W9JkepXcYDKX1NsKreVuXYdo7oliwl2DP0bppSeBbUo/omLdxsgtuStjc7rsSNgK/lCxGlXPEyU=} {1577836800 1 0 Scope notes: testnotes Species notes: testnotes Tilt series notes: testnotes testscope  testsname teststrain 1 0.1 0.3 0 0.4 2 0.1 0.2 testemdb testuname Caltech Jensen Lab testseries}}
+		//PrettyPrint(pt)
+		//{
+		//  "floAddress": "oYidNmhhCZ76BEKyZJdiqu7YFAURRfSbCJ",
+		//  "timestamp": 1605494884,
+		//  "type": "research",
+		//  "subtype": "tomogram",
+		//  "info": {
+		//    "title": "testtitle",
+		//    "tags": "etdb,jensen.lab,tomogram,electron.tomography",
+		//    "description": "Auto imported from etdb"
+		//  },
+		//  "details": {
+		//    "date": 1577836800,
+		//    "NCBItaxID": 1,
+		//    "artNotes": "Scope notes: testnotes\nSpecies notes: testnotes\nTilt series notes: testnotes\n",
+		//    "scopeName": "testscope",
+		//    "speciesName": "testsname",
+		//    "strain": "teststrain",
+		//    "tiltSingleDual": 1,
+		//    "defocus": 0.1,
+		//    "dosage": 0.3,
+		//    "tiltMin": 0.4,
+		//    "tiltMax": 2,
+		//    "tiltStep": 0.1,
+		//    "magnification": 0.2,
+		//    "emdb": "testemdb",
+		//    "microscopist": "testuname",
+		//    "institution": "Caltech",
+		//    "lab": "Jensen Lab",
+		//    "sid": "testseries"
+		//  },
+		//  "storage": {
+		//    "network": "ipfs",
+		//    "location": "QmfJxwEBCbfe5SRQpP1T1jaJrCLMuBSwP8FgpeV54rsPLx",
+		//    "files": [
+		//      {
+		//        "dname": "testfname.png",
+		//        "fname": "file_123/testfname.png",
+		//        "fsize": 14,
+		//        "type": "tomogram",
+		//        "subtype": "snapshot",
+		//        "fNotes": "testnotes"
+		//      },
+		//      {
+		//        "software": "testacquisition",
+		//        "dname": "testfname.mp4",
+		//        "fname": "rawdata/testfname.mp4",
+		//        "fsize": 14,
+		//        "type": "tomogram",
+		//        "subtype": "tiltSeries",
+		//        "fNotes": "testfname.mp4"
+		//      },
+		//      {
+		//        "fname": "keyimg_testseries_s.jpg",
+		//        "fsize": 24,
+		//        "type": "image",
+		//        "subtype": "thumbnail",
+		//        "cType": "image/jpeg"
+		//      },
+		//      {
+		//        "fname": "keyimg_testseries.jpg",
+		//        "fsize": 24,
+		//        "type": "tomogram",
+		//        "subtype": "keyimg",
+		//        "cType": "image/jpeg"
+		//      },
+		//      {
+		//        "fname": "keymov_testseries.mp4",
+		//        "fsize": 1990544,
+		//        "type": "tomogram",
+		//        "subtype": "keymov",
+		//        "cType": "video/mp4"
+		//      },
+		//      {
+		//        "fname": "keymov_testseries.flv",
+		//        "fsize": 6389760,
+		//        "type": "tomogram",
+		//        "subtype": "keymov",
+		//        "cType": "video/x-flv"
+		//      }
+		//    ]
+		//  },
+		//  "signature": "IM198hMbDLY1W9JkepXcYDKX1NsKreVuXYdo7oliwl2DP0bppSeBbUo/omLdxsgtuStjc7rsSNgK/lCxGlXPEyU="
+		//}
 		if err != nil {
 			fmt.Println("Unable to obtain " + id)
 			fmt.Println(err)
 		} else {
 			fmt.Println("---------")
+			
 			//PrettyPrint(pt)
 			//{
-			//  "floAddress": "ofMvqGLqxjdJr784cVGRquV3edJA5jEykd",
-			//  "timestamp": 1605166706,
+			//  "floAddress": "oYidNmhhCZ76BEKyZJdiqu7YFAURRfSbCJ",
+			//  "timestamp": 1605495108,
 			//  "type": "research",
 			//  "subtype": "tomogram",
 			//  "info": {
@@ -129,15 +214,15 @@ func main() {
 			//      }
 			//    ]
 			//  },
-			//  "signature": "Hx4Lf+StYF01XvPvULBk8jgqBerF51Bi6aqZKL3pCht+UcLKkDqHMgCVzfcBDls/1iGYnVZy/NPa0G6VFTF+JlQ="
+			//  "signature": "HxLGdG0mTvhNY2iYhMEV+2c6fG1tlGzwWPClAYHLJFFJUL95xGUZUFRZn9CmnRVvYFpif2sYFUaoaQEudqU5fnU="
 			//}
-
 			min, err := json.Marshal(rWrap{OipPublish{OipArtifact{pt}}}) // 将数据编码成json字符串
+			
 			//PrettyPrint(OipArtifact{pt})
 			//{
 			//  "artifact": {
-			//    "floAddress": "ofMvqGLqxjdJr784cVGRquV3edJA5jEykd",
-			//    "timestamp": 1605167128,
+			//    "floAddress": "oYidNmhhCZ76BEKyZJdiqu7YFAURRfSbCJ",
+			//    "timestamp": 1605495108,
 			//    "type": "research",
 			//    "subtype": "tomogram",
 			//    "info": {
@@ -216,7 +301,7 @@ func main() {
 			//        }
 			//      ]
 			//    },
-			//    "signature": "Hx4Lf+StYF01XvPvULBk8jgqBerF51Bi6aqZKL3pCht+UcLKkDqHMgCVzfcBDls/1iGYnVZy/NPa0G6VFTF+JlQ="
+			//    "signature": "HxLGdG0mTvhNY2iYhMEV+2c6fG1tlGzwWPClAYHLJFFJUL95xGUZUFRZn9CmnRVvYFpif2sYFUaoaQEudqU5fnU="
 			//  }
 			//}
 
@@ -224,8 +309,8 @@ func main() {
 			//{
 			//  "publish": {
 			//    "artifact": {
-			//      "floAddress": "ofMvqGLqxjdJr784cVGRquV3edJA5jEykd",
-			//      "timestamp": 1605167302,
+			//      "floAddress": "oYidNmhhCZ76BEKyZJdiqu7YFAURRfSbCJ",
+			//      "timestamp": 1605495266,
 			//      "type": "research",
 			//      "subtype": "tomogram",
 			//      "info": {
@@ -304,18 +389,18 @@ func main() {
 			//          }
 			//        ]
 			//      },
-			//      "signature": "Hx4Lf+StYF01XvPvULBk8jgqBerF51Bi6aqZKL3pCht+UcLKkDqHMgCVzfcBDls/1iGYnVZy/NPa0G6VFTF+JlQ="
+			//      "signature": "IIYFdaPJtWZLEMJL+yznaJ9yObj9bLxnXDmH3e6BI1K8AduwN8Eu/uCsyRJG6PjubE51uJ+ySers/J50X4gveOg="
 			//    }
 			//  }
 			//}
-
+			
 			//PrettyPrint(rWrap{OipPublish{OipArtifact{pt}}})
 			//{
 			//  "oip042": {
 			//    "publish": {
 			//      "artifact": {
-			//        "floAddress": "ofMvqGLqxjdJr784cVGRquV3edJA5jEykd",
-			//        "timestamp": 1605167444,
+			//        "floAddress": "oYidNmhhCZ76BEKyZJdiqu7YFAURRfSbCJ",
+			//        "timestamp": 1605495266,
 			//        "type": "research",
 			//        "subtype": "tomogram",
 			//        "info": {
@@ -394,19 +479,19 @@ func main() {
 			//            }
 			//          ]
 			//        },
-			//        "signature": "Hx4Lf+StYF01XvPvULBk8jgqBerF51Bi6aqZKL3pCht+UcLKkDqHMgCVzfcBDls/1iGYnVZy/NPa0G6VFTF+JlQ="
+			//        "signature": "IIYFdaPJtWZLEMJL+yznaJ9yObj9bLxnXDmH3e6BI1K8AduwN8Eu/uCsyRJG6PjubE51uJ+ySers/J50X4gveOg="
 			//      }
 			//    }
 			//  }
 			//}
 
-			//fmt.Println(json.Marshal(rWrap{OipPublish{OipArtifact{pt}}}))
-			//[123 34 111 105 112 48 52 50 34 58 123 34 112 117 98 108 105 115 104 34 58 123 34 97 114 116 105 102 97 99 116 34 58 123 34 102 108 111 65 100 100 114 101 115 115 34 58 34 111 102 77 118 113 71 76 113 120 106 100 74 114 55 56 52 99 86 71 82 113 117 86 51 101 100 74 65 53 106 69 121 107 100 34 44 34 116 105 109 101 115 116 97 109 112 34 58 49 54 48 53 49 54 55 53 50 54 44 34 116 121 112 101 34 58 34 114 101 115 101 97 114 99 104 34 44 34 115 117 98 116 121 112 101 34 58 34 116 111 109 111 103 114 97 109 34 44 34 105 110 102 111 34 58 123 34 116 105 116 108 101 34 58 34 116 101 115 116 116 105 116 108 101 34 44 34 116 97 103 115 34 58 34 101 116 100 98 44 106 101 110 115 101 110 46 108 97 98 44 116 111 109 111 103 114 97 109 44 101 108 101 99 116 114 111 110 46 116 111 109 111 103 114 97 112 104 121 34 44 34 100 101 115 99 114 105 112 116 105 111 110 34 58 34 65 117 116 111 32 105 109 112 111 114 116 101 100 32 102 114 111 109 32 101 116 100 98 34 125 44 34 100 101 116 97 105 108 115 34 58 123 34 100 97 116 101 34 58 49 53 55 55 56 51 54 56 48 48 44 34 78 67 66 73 116 97 120 73 68 34 58 49 44 34 97 114 116 78 111 116 101 115 34 58 34 83 99 111 112 101 32 110 111 116 101 115 58 32 116 101 115 116 110 111 116 101 115 92 110 83 112 101 99 105 101 115 32 110 111 116 101 115 58 32 116 101 115 116 110 111 116 101 115 92 110 84 105 108 116 32 115 101 114 105 101 115 32 110 111 116 101 115 58 32 116 101 115 116 110 111 116 101 115 92 110 34 44 34 115 99 111 112 101 78 97 109 101 34 58 34 116 101 115 116 115 99 111 112 101 34 44 34 115 112 101 99 105 101 115 78 97 109 101 34 58 34 116 101 115 116 115 110 97 109 101 34 44 34 115 116 114 97 105 110 34 58 34 116 101 115 116 115 116 114 97 105 110 34 44 34 116 105 108 116 83 105 110 103 108 101 68 117 97 108 34 58 49 44 34 100 101 102 111 99 117 115 34 58 48 46 49 44 34 100 111 115 97 103 101 34 58 48 46 51 44 34 116 105 108 116 77 105 110 34 58 48 46 52 44 34 116 105 108 116 77 97 120 34 58 50 44 34 116 105 108 116 83 116 101 112 34 58 48 46 49 44 34 109 97 103 110 105 102 105 99 97 116 105 111 110 34 58 48 46 50 44 34 101 109 100 98 34 58 34 116 101 115 116 101 109 100 98 34 44 34 109 105 99 114 111 115 99 111 112 105 115 116 34 58 34 116 101 115 116 117 110 97 109 101 34 44 34 105 110 115 116 105 116 117 116 105 111 110 34 58 34 67 97 108 116 101 99 104 34 44 34 108 97 98 34 58 34 74 101 110 115 101 110 32 76 97 98 34 44 34 115 105 100 34 58 34 116 101 115 116 115 101 114 105 101 115 34 125 44 34 115 116 111 114 97 103 101 34 58 123 34 110 101 116 119 111 114 107 34 58 34 105 112 102 115 34 44 34 108 111 99 97 116 105 111 110 34 58 34 81 109 102 74 120 119 69 66 67 98 102 101 53 83 82 81 112 80 49 84 49 106 97 74 114 67 76 77 117 66 83 119 80 56 70 103 112 101 86 53 52 114 115 80 76 120 34 44 34 102 105 108 101 115 34 58 91 123 34 100 110 97 109 101 34 58 34 116 101 115 116 102 110 97 109 101 46 112 110 103 34 44 34 102 110 97 109 101 34 58 34 102 105 108 101 95 49 50 51 47 116 101 115 116 102 110 97 109 101 46 112 110 103 34 44 34 102 115 105 122 101 34 58 49 52 44 34 116 121 112 101 34 58 34 116 111 109 111 103 114 97 109 34 44 34 115 117 98 116 121 112 101 34 58 34 115 110 97 112 115 104 111 116 34 44 34 102 78 111 116 101 115 34 58 34 116 101 115 116 110 111 116 101 115 34 125 44 123 34 115 111 102 116 119 97 114 101 34 58 34 116 101 115 116 97 99 113 117 105 115 105 116 105 111 110 34 44 34 100 110 97 109 101 34 58 34 116 101 115 116 102 110 97 109 101 46 109 112 52 34 44 34 102 110 97 109 101 34 58 34 114 97 119 100 97 116 97 47 116 101 115 116 102 110 97 109 101 46 109 112 52 34 44 34 102 115 105 122 101 34 58 49 52 44 34 116 121 112 101 34 58 34 116 111 109 111 103 114 97 109 34 44 34 115 117 98 116 121 112 101 34 58 34 116 105 108 116 83 101 114 105 101 115 34 44 34 102 78 111 116 101 115 34 58 34 116 101 115 116 102 110 97 109 101 46 109 112 52 34 125 44 123 34 102 110 97 109 101 34 58 34 107 101 121 105 109 103 95 116 101 115 116 115 101 114 105 101 115 95 115 46 106 112 103 34 44 34 102 115 105 122 101 34 58 50 52 44 34 116 121 112 101 34 58 34 105 109 97 103 101 34 44 34 115 117 98 116 121 112 101 34 58 34 116 104 117 109 98 110 97 105 108 34 44 34 99 84 121 112 101 34 58 34 105 109 97 103 101 47 106 112 101 103 34 125 44 123 34 102 110 97 109 101 34 58 34 107 101 121 105 109 103 95 116 101 115 116 115 101 114 105 101 115 46 106 112 103 34 44 34 102 115 105 122 101 34 58 50 52 44 34 116 121 112 101 34 58 34 116 111 109 111 103 114 97 109 34 44 34 115 117 98 116 121 112 101 34 58 34 107 101 121 105 109 103 34 44 34 99 84 121 112 101 34 58 34 105 109 97 103 101 47 106 112 101 103 34 125 44 123 34 102 110 97 109 101 34 58 34 107 101 121 109 111 118 95 116 101 115 116 115 101 114 105 101 115 46 109 112 52 34 44 34 102 115 105 122 101 34 58 49 57 57 48 53 52 52 44 34 116 121 112 101 34 58 34 116 111 109 111 103 114 97 109 34 44 34 115 117 98 116 121 112 101 34 58 34 107 101 121 109 111 118 34 44 34 99 84 121 112 101 34 58 34 118 105 100 101 111 47 109 112 52 34 125 44 123 34 102 110 97 109 101 34 58 34 107 101 121 109 111 118 95 116 101 115 116 115 101 114 105 101 115 46 102 108 118 34 44 34 102 115 105 122 101 34 58 54 51 56 57 55 54 48 44 34 116 121 112 101 34 58 34 116 111 109 111 103 114 97 109 34 44 34 115 117 98 116 121 112 101 34 58 34 107 101 121 109 111 118 34 44 34 99 84 121 112 101 34 58 34 118 105 100 101 111 47 120 45 102 108 118 34 125 93 125 44 34 115 105 103 110 97 116 117 114 101 34 58 34 72 120 52 76 102 43 83 116 89 70 48 49 88 118 80 118 85 76 66 107 56 106 103 113 66 101 114 70 53 49 66 105 54 97 113 90 75 76 51 112 67 104 116 43 85 99 76 75 107 68 113 72 77 103 67 86 122 102 99 66 68 108 115 47 49 105 71 89 110 86 90 121 47 78 80 97 48 71 54 86 70 84 70 43 74 108 81 61 34 125 125 125 125] <nil>
+			//fmt.Println(json.Marshal(rWrap{OipPublish{OipArtifact{pt}}})) // 长串数字
 			if err != nil {
 				panic(err)
 			}
+
 			//fmt.Println(string(min))
-			//{"oip042":{"publish":{"artifact":{"floAddress":"ofMvqGLqxjdJr784cVGRquV3edJA5jEykd","timestamp":1605167645,"type":"research","subtype":"tomogram","info":{"title":"testtitle","tags":"etdb,jensen.lab,tomogram,electron.tomography","description":"Auto imported from etdb"},"details":{"date":1577836800,"NCBItaxID":1,"artNotes":"Scope notes: testnotes\nSpecies notes: testnotes\nTilt series notes: testnotes\n","scopeName":"testscope","speciesName":"testsname","strain":"teststrain","tiltSingleDual":1,"defocus":0.1,"dosage":0.3,"tiltMin":0.4,"tiltMax":2,"tiltStep":0.1,"magnification":0.2,"emdb":"testemdb","microscopist":"testuname","institution":"Caltech","lab":"Jensen Lab","sid":"testseries"},"storage":{"network":"ipfs","location":"QmfJxwEBCbfe5SRQpP1T1jaJrCLMuBSwP8FgpeV54rsPLx","files":[{"dname":"testfname.png","fname":"file_123/testfname.png","fsize":14,"type":"tomogram","subtype":"snapshot","fNotes":"testnotes"},{"software":"testacquisition","dname":"testfname.mp4","fname":"rawdata/testfname.mp4","fsize":14,"type":"tomogram","subtype":"tiltSeries","fNotes":"testfname.mp4"},{"fname":"keyimg_testseries_s.jpg","fsize":24,"type":"image","subtype":"thumbnail","cType":"image/jpeg"},{"fname":"keyimg_testseries.jpg","fsize":24,"type":"tomogram","subtype":"keyimg","cType":"image/jpeg"},{"fname":"keymov_testseries.mp4","fsize":1990544,"type":"tomogram","subtype":"keymov","cType":"video/mp4"},{"fname":"keymov_testseries.flv","fsize":6389760,"type":"tomogram","subtype":"keymov","cType":"video/x-flv"}]},"signature":"Hx4Lf+StYF01XvPvULBk8jgqBerF51Bi6aqZKL3pCht+UcLKkDqHMgCVzfcBDls/1iGYnVZy/NPa0G6VFTF+JlQ="}}}}
+			//{"oip042":{"publish":{"artifact":{"floAddress":"oYidNmhhCZ76BEKyZJdiqu7YFAURRfSbCJ","timestamp":1605495266,"type":"research","subtype":"tomogram","info":{"title":"testtitle","tags":"etdb,jensen.lab,tomogram,electron.tomography","description":"Auto imported from etdb"},"details":{"date":1577836800,"NCBItaxID":1,"artNotes":"Scope notes: testnotes\nSpecies notes: testnotes\nTilt series notes: testnotes\n","scopeName":"testscope","speciesName":"testsname","strain":"teststrain","tiltSingleDual":1,"defocus":0.1,"dosage":0.3,"tiltMin":0.4,"tiltMax":2,"tiltStep":0.1,"magnification":0.2,"emdb":"testemdb","microscopist":"testuname","institution":"Caltech","lab":"Jensen Lab","sid":"testseries"},"storage":{"network":"ipfs","location":"QmfJxwEBCbfe5SRQpP1T1jaJrCLMuBSwP8FgpeV54rsPLx","files":[{"dname":"testfname.png","fname":"file_123/testfname.png","fsize":14,"type":"tomogram","subtype":"snapshot","fNotes":"testnotes"},{"software":"testacquisition","dname":"testfname.mp4","fname":"rawdata/testfname.mp4","fsize":14,"type":"tomogram","subtype":"tiltSeries","fNotes":"testfname.mp4"},{"fname":"keyimg_testseries_s.jpg","fsize":24,"type":"image","subtype":"thumbnail","cType":"image/jpeg"},{"fname":"keyimg_testseries.jpg","fsize":24,"type":"tomogram","subtype":"keyimg","cType":"image/jpeg"},{"fname":"keymov_testseries.mp4","fsize":1990544,"type":"tomogram","subtype":"keymov","cType":"video/mp4"},{"fname":"keymov_testseries.flv","fsize":6389760,"type":"tomogram","subtype":"keymov","cType":"video/x-flv"}]},"signature":"IIYFdaPJtWZLEMJL+yznaJ9yObj9bLxnXDmH3e6BI1K8AduwN8Eu/uCsyRJG6PjubE51uJ+ySers/J50X4gveOg="}}}}
 			ids, err := sendToBlockchain("json:" + string(min))  // 发送
 			if err != nil {
 				fmt.Println(ids)
@@ -417,10 +502,10 @@ func main() {
 			}
 		}
 
-		//err = saveHistory()  // 记录历史
-		//if err != nil {
-		//	panic(err)
-		//}
+		err = saveHistory()  // 记录历史
+		if err != nil {
+			panic(err)
+		}
 		time.Sleep(1 * time.Second)
 	}
 }
@@ -685,7 +770,7 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 			return pt, err
 		}
 		ipfsHashes[tiltSeriesId] = hash
-		//saveIpfsHashes()  // 本目录下保存 ipfs 哈希值
+		saveIpfsHashes()  //本目录下保存 ipfs 哈希值
 	}
 
 	ts := time.Now().Unix()
@@ -836,7 +921,7 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 	for _, df := range tsr.DataFiles {
 		//fmt.Println(df) //{2dimage testfname.png testnotes testtdimage tomogram snapshot /home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png 123 0 }
 		fName := strings.TrimPrefix(df.FilePath, "/home/guoxi/snap/ipfs/blockchain/tomography/data/"+tsr.Id+"/")  // 返回不含前缀字符的 df.FilePath
-		//fmt.Println(df.FilePath) ///home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png
+		//fmt.Println(df.FilePath) // /home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png
 		//fmt.Println(fName) //file_123/testfname.png
 		//fmt.Println(df.Auto) //0
 		if df.Auto == 2 {
@@ -848,7 +933,7 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 					return pt, err
 				}
 			}
-			//fmt.Println(df.FilePath) ///home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png
+			//fmt.Println(df.FilePath) // /home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png
 			//fmt.Println(df.Filename) //testfname.png
 			h, err := ipfsPinPath(df.FilePath, df.Filename)
 			//fmt.Println(h) //bafkreig65botpnfaoyaqw6y4fum42mtpjv7uwpn5jzmug52mxuhwnnr26m
@@ -928,7 +1013,7 @@ func tiltIdToPublishTomogram(tiltSeriesId string) (oip042.PublishTomogram, error
 		//    "caps": "QmbHY3oEcDaiEg3yMgDAFS5gc4FfsXNFi3PhtgmQvoaqAc"
 		//  }
 		//}		
-		//saveIpfsHashes()
+		saveIpfsHashes()
 	}
 
 	//fmt.Println(tsr.ThreeDFiles) //[{rawdata testfname.mp4 testfname.mp4 tomogram tiltSeries /home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/rawdata/testfname.mp4 123 testacquisition}]

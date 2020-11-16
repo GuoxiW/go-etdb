@@ -5,13 +5,10 @@ package main
 import (
 	"database/sql" // sql 包提供了保证SQL或类SQL数据库的泛用接口
 	"errors"
-
-	//"fmt" //用于输出显示数据
 	"io/ioutil"
 	"regexp" // 正则表达式
 	"strconv"
 	"strings"
-
 	"github.com/go-sql-driver/mysql" // mysql
 	"github.com/jmoiron/sqlx"        // sql 通用拓展
 )
@@ -58,13 +55,13 @@ func init() {
 	conf.DBName = config.DatabaseConfiguration.Name     // 读取 config.go 中的数据
 
 	newDb, err := sqlx.Connect("mysql", conf.FormatDSN()) // 连接 sql
-	//fmt.Println(newDb) &{0xc4200ceaa0 mysql false 0xc42017cff0}
-	//fmt.Println(err) <nil>
+	//fmt.Println(newDb) //&{0xc42010caa0 mysql false 0xc4201baff0}
+	//fmt.Println(err) //<nil>
 	if err != nil {
 		panic(err)
 	}
 	dbh = newDb // 将连接到的publicdb命名为dbh
-	//fmt.Println(dbh) &{0xc4200ceaa0 mysql false 0xc42017cff0}
+	//fmt.Println(dbh) //&{0xc42010caa0 mysql false 0xc4201baff0}
 }
 
 type tiltSeriesRow struct {
@@ -116,9 +113,110 @@ var extractTiltStepRe = regexp.MustCompile(`^[0-9.]+`) // 正则表达式匹配 
 func GetTiltSeriesById(tiltSeriesId string) (ts TiltSeries, err error) { // 通过id获得ts数据。
 	var tsr tiltSeriesRow
 	err = dbh.Get(&tsr, selectTiltSeriesSummarySql, 1, tiltSeriesId) // 给定tsid, 用sql语句提取tsrow结构体
-	//fmt.Println(tsr) //{{testseries true} {testtitle true} {2020-01-01 00:00:00 +0000 UTC true} {testnotes true} {testscope true} {testroles true} {testnotes true} {testsname true} {testnotes true} {teststrain true} {1 true} {1 true} {0.1 true} {0.2 true} {0.3 true} {0 true} {0.4 true} {2 true} {0.1 true} {testacquisition true} {testprocess
-	//true} {testemdb true} {0 true} {0 true} {testuname true}}
-
+	//fmt.Println(tsr) //{{testseries true} {testtitle true} {2020-01-01 00:00:00 +0000 UTC true} {testnotes true} {testscope true} {testroles true} {testnotes true} {testsname true} {testnotes true} {teststrain true} {1 true} {1 true} {0.1 true} {0.2 true} {0.3 true} {0 true} {0.4 true} {2 true} {0.1 true} {testacquisition true} {testprocess true} {testemdb true} {1 true} {1 true} {testuname true}}
+	//PrettyPrint(tsr)
+	//{
+	//  "TiltSeriesID": {
+	//    "String": "testseries",
+	//    "Valid": true
+	//  },
+	//  "Title": {
+	//    "String": "testtitle",
+	//    "Valid": true
+	//  },
+	//  "TomoDate": {
+	//    "Time": "2020-01-01T00:00:00Z",
+	//    "Valid": true
+	//  },
+	//  "TsdTXTNotes": {
+	//    "String": "testnotes",
+	//    "Valid": true
+	//  },
+	//  "Scope": {
+	//    "String": "testscope",
+	//    "Valid": true
+	//  },
+	//  "Roles": {
+	//    "String": "testroles",
+	//    "Valid": true
+	//  },
+	//  "ScdTXTNotes": {
+	//    "String": "testnotes",
+	//    "Valid": true
+	//  },
+	//  "SpeciesName": {
+	//    "String": "testsname",
+	//    "Valid": true
+	//  },
+	//  "SpdTXTNotes": {
+	//    "String": "testnotes",
+	//    "Valid": true
+	//  },
+	//  "Strain": {
+	//    "String": "teststrain",
+	//    "Valid": true
+	//  },
+	//  "TaxId": {
+	//    "Int64": 1,
+	//    "Valid": true
+	//  },
+	//  "SingleDual": {
+	//    "Int64": 1,
+	//    "Valid": true
+	//  },
+	//  "Defocus": {
+	//    "Float64": 0.1,
+	//    "Valid": true
+	//  },
+	//  "Magnification": {
+	//    "Float64": 0.2,
+	//    "Valid": true
+	//  },
+	//  "Dosage": {
+	//    "Float64": 0.3,
+	//    "Valid": true
+	//  },
+	//  "TiltConstant": {
+	//    "Float64": 0,
+	//    "Valid": true
+	//  },
+	//  "TiltMin": {
+	//    "Float64": 0.4,
+	//    "Valid": true
+	//  },
+	//  "TiltMax": {
+	//    "Float64": 2,
+	//    "Valid": true
+	//  },
+	//  "TiltStep": {
+	//    "String": "0.1",
+	//    "Valid": true
+	//  },
+	//  "SoftwareAcquisition": {
+	//    "String": "testacquisition",
+	//    "Valid": true
+	//  },
+	//  "SoftwareProcess": {
+	//    "String": "testprocess",
+	//    "Valid": true
+	//  },
+	//  "Emdb": {
+	//    "String": "testemdb",
+	//    "Valid": true
+	//  },
+	//  "KeyImg": {
+	//    "Int64": 1,
+	//    "Valid": true
+	//  },
+	//  "KeyMov": {
+	//    "Int64": 1,
+	//    "Valid": true
+	//  },
+	//  "FullName": {
+	//    "String": "testuname",
+	//    "Valid": true
+	//  }
+	//}
 	if err != nil {
 		return
 	}
@@ -138,7 +236,7 @@ func GetTiltSeriesById(tiltSeriesId string) (ts TiltSeries, err error) { // 通�
 		ts.SpeciesName = tsr.SpeciesName.String // 检验后命名speciesname
 		//fmt.Println(ts.SpeciesName)
 	}
-	if len(ts.Title) == 0 { // testtitle
+	if len(ts.Title) == 0 { // testtitle 所以不会运行
 		ts.Title = ts.SpeciesName // 如果没有title, 用speciesname代替title
 		//fmt.Println(ts.Title)
 	}
@@ -220,11 +318,11 @@ func GetTiltSeriesById(tiltSeriesId string) (ts TiltSeries, err error) { // 通�
 		ts.Emdb = tsr.Emdb.String // 检验后命名emdb
 		//fmt.Println(ts.Emdb)
 	}
-	if tsr.KeyMov.Valid { // 0
+	if tsr.KeyMov.Valid { // 1
 		ts.KeyMov = tsr.KeyMov.Int64 // 检验后命名keymov
 		//fmt.Println(ts.KeyMov)
 	}
-	if tsr.KeyImg.Valid { // 0
+	if tsr.KeyImg.Valid { // 1
 		ts.KeyImg = tsr.KeyImg.Int64 // 检验后命名keyimg
 		//fmt.Println(ts.KeyImg)
 	}
@@ -234,7 +332,7 @@ func GetTiltSeriesById(tiltSeriesId string) (ts TiltSeries, err error) { // 通�
 	}
 
 	rows, err := dbh.Queryx(selectDataFilesSql, tiltSeriesId) // datafile 的 sql语句来查询 tsid
-	//fmt.Println(rows) // &{0xc42026a000 false 0xc42017cfc0 false [] []}
+	//fmt.Println(rows) //&{0xc420254280 false 0xc4201b8ff0 false [] []}
 
 	if err != nil {
 		return
@@ -244,11 +342,39 @@ func GetTiltSeriesById(tiltSeriesId string) (ts TiltSeries, err error) { // 通�
 	for rows.Next() {
 		var dfr dataFileRow
 		err = rows.StructScan(&dfr) // 扫描结构体
+		//fmt.Println(dfr) //{{2dimage true} {testfname.png true} {testnotes true} {testtdimage true} {123 true} {0 true}}
+		//PrettyPrint(dfr)
+		//{
+		//  "Filetype": {
+		//    "String": "2dimage",
+		//    "Valid": true
+		//  },
+		//  "Filename": {
+		//    "String": "testfname.png",
+		//    "Valid": true
+		//  },
+		//  "Notes": {
+		//    "String": "testnotes",
+		//    "Valid": true
+		//  },
+		//  "ThreeDFileImage": {
+		//    "String": "testtdimage",
+		//    "Valid": true
+		//  },
+		//  "DefId": {
+		//    "Int64": 123,
+		//    "Valid": true
+		//  },
+		//  "Auto": {
+		//    "Int64": 0,
+		//    "Valid": true
+		//  }
+		//}
 		if err != nil {
 			return
 		}
 		df := DataFile{}
-		if dfr.Filename.Valid { // testfname
+		if dfr.Filename.Valid { // testfname.png
 			df.Filename = dfr.Filename.String // 检验命名filename
 			//fmt.Println(df.Filename)
 			if len(strings.TrimSpace(df.Filename)) == 0 {
@@ -280,6 +406,7 @@ func GetTiltSeriesById(tiltSeriesId string) (ts TiltSeries, err error) { // 通�
 			//fmt.Println(df.Auto)
 		}
 		df.Type = "tomogram"
+		//fmt.Println(df.Filetype) //2dimage
 		switch df.Filetype { // 根据filetype选择
 		case "2dimage":
 			df.SubType = "snapshot"
@@ -297,7 +424,23 @@ func GetTiltSeriesById(tiltSeriesId string) (ts TiltSeries, err error) { // 通�
 		default:
 			panic("Unknown new DataFile.FileType " + df.Filetype + " from DEF_id " + strconv.FormatInt(df.DefId, 10))
 		}
+		//PrettyPrint(ts.DataFiles) null
 		ts.DataFiles = append(ts.DataFiles, df)
+		//PrettyPrint(ts.DataFiles)
+		//[
+		//  {
+		//    "Filetype": "2dimage",
+		//    "Filename": "testfname.png",
+		//    "Notes": "testnotes",
+		//    "ThreeDFileImage": "testtdimage",
+		//    "Type": "tomogram",
+		//    "SubType": "snapshot",
+		//    "FilePath": "/home/guoxi/snap/ipfs/blockchain/tomography/data/testseries/file_123/testfname.png",
+		//    "DefId": 123,
+		//    "Auto": 0,
+		//    "Software": ""
+		//  }
+		//]
 	}
 	err = rows.Err()
 	if err != nil {
@@ -313,11 +456,30 @@ func GetTiltSeriesById(tiltSeriesId string) (ts TiltSeries, err error) { // 通�
 	for rows.Next() {
 		var tdfr threeDFileRow
 		err = rows.StructScan(&tdfr) // 扫描结构体
+		//PrettyPrint(tdfr)
+		//{
+		//  "Classify": {
+		//    "String": "rawdata",
+		//    "Valid": true
+		//  },
+		//  "Notes": {
+		//    "String": "testnotes",
+		//    "Valid": true
+		//  },
+		//  "Filename": {
+		//    "String": "testfname.mp4",
+		//    "Valid": true
+		//  },
+		//  "DefId": {
+		//    "Int64": 123,
+		//    "Valid": true
+		//  }
+		//}
 		if err != nil {
 			return
 		}
 		tdf := ThreeDFile{}
-		if tdfr.Filename.Valid { // testfname
+		if tdfr.Filename.Valid { // testfname.mp4
 			tdf.Filename = tdfr.Filename.String // 检验后命名filename
 			//fmt.Println(tdf.Filename)
 		}
@@ -325,7 +487,7 @@ func GetTiltSeriesById(tiltSeriesId string) (ts TiltSeries, err error) { // 通�
 			tdf.Classify = tdfr.Classify.String // 检验后命名classify  文件类型
 			//fmt.Println(tdf.Classify)
 		}
-		if tdfr.Notes.Valid { // testfname
+		if tdfr.Notes.Valid { // testfname.mp4
 			tdf.Notes = tdfr.Filename.String // 检验后命名notes
 			//fmt.Println(tdf.Notes)
 		}
@@ -334,11 +496,14 @@ func GetTiltSeriesById(tiltSeriesId string) (ts TiltSeries, err error) { // 通�
 			//fmt.Println(tdf.DefId)
 		}
 		tdf.Type = "tomogram"
+		//fmt.Println(tdf.Classify) //rawdata
 		switch tdf.Classify {
 		case "rawdata":
 			tdf.SubType = "tiltSeries"
+			//fmt.Println(tdf.Software) //空
 			if !strings.Contains(ts.SoftwareAcquisition, ",") {
 				tdf.Software = ts.SoftwareAcquisition
+				//fmt.Println(tdf.Software) //testacquisition
 			}
 			tdf.FilePath = "/home/guoxi/snap/ipfs/blockchain/tomography/data/" + tiltSeriesId + "/rawdata/" + tdf.Filename
 		case "reconstruction":
