@@ -72,29 +72,29 @@ func sendToAddress(address string, amount float64, floData string) (string, erro
 	return reply.Result.(string), nil
 }
 
-func setTxFee(floPerKb float64) error { // 设置交易费用
-	var satoshi = int64(floPerKb * 1e8)
-	//fmt.Println(satoshi) //100000
-	//fmt.Println(id) //0
-	cmd, err := flojson.NewSetTxFeeCmd(id, satoshi)
-	//fmt.Println(cmd) //&{0 100000}
-	//fmt.Println(err) //<nil>
-	if err != nil {
-		return err
-	}
-
-	reply, err := sendRPC(cmd)
-	//fmt.Println(reply) //{true <nil> 0xc420246140}
-	//fmt.Println(reply.Error) //<nil>
-	//fmt.Println(err) //<nil>
-	if err != nil {
-		return err
-	}
-	if reply.Error != nil {
-		return reply.Error
-	}
-	return nil
-}
+//func setTxFee(floPerKb float64) error { // 设置交易费用
+//	var satoshi = int64(floPerKb * 1e8)
+//	//fmt.Println(satoshi) //100000
+//	//fmt.Println(id) //0
+//	cmd, err := flojson.NewSetTxFeeCmd(id, satoshi)
+//	//fmt.Println(cmd) //&{0 100000}
+//	//fmt.Println(err) //<nil>
+//	if err != nil {
+//		return err
+//	}
+//
+//	reply, err := sendRPC(cmd)
+//	//fmt.Println(reply) //{true <nil> 0xc420246140}
+//	//fmt.Println(reply.Error) //<nil>
+//	//fmt.Println(err) //<nil>
+//	if err != nil {
+//		return err
+//	}
+//	if reply.Error != nil {
+//		return reply.Error
+//	}
+//	return nil
+//}
 
 func sendRPC(cmd flojson.Cmd) (flojson.Reply, error) { // 发送RPC调用
 	t := 0

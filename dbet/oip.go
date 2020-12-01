@@ -21,10 +21,10 @@ func sendToBlockchain(data string) ([]string, error) {  //设置交易费用, �
 	//fmt.Println(l) //1621
 
 	//fmt.Println(config.TxFeePerKb) //0.001
-	err := setTxFee(config.TxFeePerKb)
-	if err != nil {
-		return []string{}, nil
-	}
+	//err := setTxFee(config.TxFeePerKb)
+	//if err != nil {
+	//	return []string{}, nil
+	//}
 
 	// send as a single part
 	//相当于如果不用分块的话，信息已经被私钥签署过，就直接发送。
